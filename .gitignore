@@ -1,0 +1,19 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# PyCharm
+.idea
+
+# Sync
+*.icloud
+
+# Database
+*.sqlite3
+
+# Venv
+.venv
