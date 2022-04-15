@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from django.views.generic import TemplateView
 from apps.core.views import index
 
@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
     path('', index),
+    path('timeline/', include('apps.date_extraction.urls')),
 ]
