@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title>Green Deal Annotation - Timeline</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'style.css'%}">
+  <script src="https://d3js.org/d3.v4.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="wrapper">
+            <h1>Green Deal Annotation</h1>
+            <h2>Timeline</h2>
+            <ul id="dates">
+            </ul>
+        </div>
+    </div> 
+</body>
+
+<script>
+    d3.csv("{% static 'data.csv'%}", function(data){
+        var data = data.slice().sort((a, b) => d3.descending(a.date, b.date))
+        data.forEach(function(d){
+            d3.select("#dates")
+                .append('li')
+                .append("span")
+                .attr("class","date")
+                .text(d.isodate)
+                .selectAll("li")   
+        });
+
+        d3.selectAll("li")
+            .append("p")
+            .attr("class","sentence")
+            .data(data).text(function(d) { return d.sentence; });
+        
+    });
+</script>
