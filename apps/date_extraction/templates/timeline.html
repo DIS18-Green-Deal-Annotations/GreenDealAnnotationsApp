@@ -4,35 +4,243 @@
   <title>Green Deal Annotation - Timeline</title>
   {% load static %}
   <link rel="stylesheet" href="{% static 'style.css'%}">
+  <script src="{% static 'vanillaSelectBox.js' %}"></script>
   <script src="https://d3js.org/d3.v4.js"></script>
+  <script>    
+        // window.onload=function(){
+            // var filter_values = {"doc_name":["Social Climate Fund"],"start_date":[],"end_date":[]};
+            //document.getElementById("filter_dates").style.display='none'; 
+        //}
+  </script>
+
 </head>
+
 <body>
+
+<!----------------------------------------------------------->
+<!-- GET CERTAIN VALUES / FORMATS TEST -->
+<!-- 
+{% for doc in doc_names_filter %}
+    <div> {{ doc }} </div>
+{% endfor %}
+
+{% for year in year_filter %}
+    <div> {{ year|slice:":4" }} </div>
+{% endfor %}
+
+<div>{{ data|length }}</div>
+
+{% for obj in filter_data %}
+    <div> {{ obj }} </div>
+{% endfor %} -->
+
+<!----------------------------------------------------------->
+
     <div class="container">
         <div class="wrapper">
-            <h1>Green Deal Annotation</h1>
+            <section id="top">
+            <h1> Green Deal Annotation </h1>
             <h2>Timeline</h2>
-            <ul id="dates">
-            </ul>
+            <p class="introduction">
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor 
+                invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam 
+                et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est 
+                At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata 
+                sanctus est Lorem ipsum dolor sit amet. 
+                <br><br>      
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor 
+                invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. <br> 
+                At vero eos et accusam 
+                et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est 
+                At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata 
+                sanctus est Lorem ipsum dolor sit amet. 
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor 
+                invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam 
+                et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est 
+                At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata 
+                sanctus est Lorem ipsum dolor sit amet. 
+                <br><br>      
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor 
+                invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. <br> 
+                At vero eos et accusam 
+                et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est 
+                At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata 
+                sanctus est Lorem ipsum dolor sit amet. 
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor 
+                invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam 
+                et justo duo dolores et ea rebum. 
+            </p>
+            </section>
+            <div class="row">
+                <div id="Filter" class="col-md-4 fixed-sidebar">
+                    <div id="number-participants"></div>
+                    
+                    <p class="filter_parts">
+                        <label for="doc_name">Document Name</label>
+                        <br>
+                        <select onchange="getDropdownValue()" multiple="" id="doc_name" size="2">
+                            {% for doc in doc_names_filter %}
+                                <option value="{{ doc }}"> "{{ doc }}" </option>
+                            {% endfor %}
+                        </select>
+                    </p>
+                    
+                     <p class="filter_parts">
+                        <label for="start_date">Start Year</label>
+                        <br>
+                        <select onchange="getDropdownValue()"  id="start_date" size="2" >
+                            {% for year in year_filter %}
+                                <option value="{{ year|slice:':4' }}"> {{ year|slice:":4" }} </option>
+                            {% endfor %}
+                        </select>
+                    </p>
+
+                    <!-- <button class="demo" style="width:140px;" onClick="document.getElementById('chosenYear').innerHTML=document.getElementById('start_date').value;">get select value</button>
+			        <span id="chosenYear"></span> -->
+                    
+                    <!--document.getElementById('start_date').value-->
+                    
+
+                    <p class="filter_parts">
+                        <label for="end_date">End Year</label>
+                        <br>
+                        <select onchange="getDropdownValue()"  id="end_date" size="2" >
+                            {% for year in year_filter %}
+                                <option value="{{ year|slice:':4' }}"> {{ year|slice:":4" }} </option>
+                            {% endfor %}
+                        </select>
+                    </p>
+
+                    <div id="submit_filter" onclick="filter_data()"> Submit </div>
+                    <div id="reset" onclick="reset()"> Reset </div>
+
+                </div>
+
+                <!------------------------------------------------------------------------------------------->
+                
+                <div class="col-md-8">
+
+                    <div id="timeline">
+                        
+                        <ul id="dates">
+                            
+                            {% for col in data %}
+
+                                <li>
+                                    <span class="date"> {{ col.IsoDate }} </span>
+                                    <p class="sentence"> {{ col.DocSentence }} </p>
+                                </li>
+                                                                
+                            {% endfor %}   
+                                        
+                        </ul>
+                        
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
-    </div> 
+
+    </div>
+
 </body>
 
 <script>
-    d3.csv("{% static 'data.csv'%}", function(data){
-        var data = data.slice().sort((a, b) => d3.descending(a.date, b.date))
-        data.forEach(function(d){
-            d3.select("#dates")
-                .append('li')
-                .append("span")
-                .attr("class","date")
-                .text(d.isodate)
-                .selectAll("li")   
-        });
 
-        d3.selectAll("li")
-            .append("p")
-            .attr("class","sentence")
-            .data(data).text(function(d) { return d.sentence; });
+/***************************************************************************************************/
+
+    // builds dropdowns
+    vanilla_doc_name = new vanillaSelectBox("#doc_name",
+        {
+        "maxOptionWidth":250, 
+        "maxHeight": 200,
+        "minWidth": 280,
+        // "search": true,
+        translations: { "all": "All", "items": "selected" },
+        "placeHolder": "Select..." }
+        );
+
+
+    vanilla_start_doc_date = new vanillaSelectBox("#start_date",
+        {
+            "maxOptionWidth":250, 
+            "maxHeight": 200,
+            "minWidth": 280,
+            // "search": true,
+            translations: { "all": "All", "items": "selected" },
+            "placeHolder": "Select..." }
+        );
+
+        vanilla_end_doc_date = new vanillaSelectBox("#end_date",
+        {
+            "maxOptionWidth":250, 
+            "maxHeight": 200,
+            "minWidth": 280,
+            // "search": true,
+            translations: { "all": "All", "items": "selected" },
+            "placeHolder": "Select..." }
+        );
+       
+/***************************************************************************************************/
+// FILTER WON'T WORK WITH THE CURRENT SETUP (JINJA TEMPLATES); IGNORE THE FOLLOWING BIT 
+
+    document.getElementById("number-participants").textContent=("{{ data|length }}");
+    
+    var filter_values = {"doc_name":[],"start_date":[],"end_date":[]};
+
+    const range = (min, max) => [...Array(max - min + 1).keys()].map(i => i + min);
+
+    function getDropdownValue() {
+
+        filter_values["doc_name"] = document.getElementById('doc_name').value;
+        filter_values["start_date"] = document.getElementById('start_date').value;
+        filter_values["end_date"] = document.getElementById('end_date').value;
+        if (filter_values["start_date"] && filter_values["end_date"] != []){
+            filter_values["date_range"] = range(parseInt(filter_values["start_date"]),
+                                                parseInt(filter_values["end_date"]));
+        }
+
+    }
+
+    // reset button: empties selected options
+    function reset(){ 
+        vanilla_doc_name.empty();
+        vanilla_start_doc_date.empty();
+        vanilla_end_doc_date.empty();
+
+        document.getElementById("number-participants").textContent=("{{ data|length }}");
+        // filtered_data = "{{ data }}";
+
+    }
+
+    function filter_data(){
+        // {{ doc.DocName }} == filter_values["doc_name"]  
+        // {{ doc.IsoDate }} >= filter_values["start_date"] && {{ doc.IsoDate }}  <= filter_values["end_date"]
+
+        /*
+          if (Object.keys(filter_values).length > 0) {  
+            for (f in filter_values) {                  
+              if (filter_values[f].length == 0) { 
+                continue;
+              }
         
-    });
+              filtered_data = filtered_data.filter(function(d){    
+                if (filter[f].includes(d[f])) {  
+                  return d;
+                }
+              });
+            }
+          }
+        
+        */
+
+
+        document.getElementById("number-participants").textContent=("{{ filter_data|length }}");
+          
+        
+    } 
+
+        
 </script>
