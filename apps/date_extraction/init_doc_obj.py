@@ -149,6 +149,6 @@ def main():
                  "2021-07-14" #"14.7.2021"
     )
     
-    doc = doc_1
+    list = [doc_1]
 
-    return doc
+    return list

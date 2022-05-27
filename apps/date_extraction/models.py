@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 
-class TimelineDB(models.Model):
+class DateExtraction(models.Model):
     docname = models.CharField(max_length=50)
     docsentence = models.TextField()
     datelabel = models.CharField(max_length=10) 
