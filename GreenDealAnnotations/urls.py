@@ -23,4 +23,5 @@ urlpatterns = [
     path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
     path('', index),
     path('timeline/', include('apps.date_extraction.urls')),
+    path('core/', include('apps.core.urls')),
 ]
