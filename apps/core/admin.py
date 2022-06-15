@@ -11,4 +11,3 @@ class HtmlCodeAdmin(admin.ModelAdmin):
     #search_fields=('title', 'description') #create search field in the model admin
 
 admin.site.register(DateExtraction)
-admin.site.register(HtmlCode, HtmlCodeAdmin)
