@@ -166,7 +166,7 @@ def init_doc_obj():
                  "2021-07-14" #"14.7.2021"
     )
     
-    list = [doc_1]
+    list = [doc_1, doc_2]
 
     return list
 
@@ -346,21 +346,15 @@ def clean_df(df):
     return df
 
 def add_data_to_db(df):
-
-    # schreibe die Daten aus dem df in die db
-    data = DateExtraction.objects.all()
-
-    model_instances = [DateExtraction(
-    docname = record[0],
-    docsentence = record[1],
-    datelabel = record[2],
-    isodate = record[3]
-    ) for record in df]
-
-    DateExtraction.objects.bulk_create(model_instances)
-
-    print('-> add_data_to_db() ... done')
-    return 
+    # save data
+    for index, row in df.iterrows():
+        model = DateExtraction()
+        model.docname = row['name']
+        model.docsentence = row['sentence']
+        model.datelabel = row['datelabel']
+        model.isodate = row['isodate']
+        model.save()
+    return print('-> add_data_to_db() ... done')
 
 def process(doc, nlp, df):
     '''
@@ -408,6 +402,10 @@ def main():
 
     # creates list of objects for every document entry in init_doc_obj.py
     list_of_doc = init_doc_obj() 
+
+    # first delet all data in dateextraction table
+    model = DateExtraction.objects.all()
+    model.delete()
 
     for doc in list_of_doc:
         # fills df with all sentences from document

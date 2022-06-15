@@ -4,3 +4,5 @@ from django.contrib import admin
 
 from apps.date_extraction.models import DateExtraction
 admin.site.register(DateExtraction)
+
+
