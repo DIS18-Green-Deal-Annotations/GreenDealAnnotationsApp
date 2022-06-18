@@ -1,11 +1,17 @@
 import re
 
 from django.shortcuts import render
+from django.template import loader
 from django.urls import get_resolver
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
+import html
 
-@csrf_exempt
+from .models import HtmlCode
+
+
+# @csrf_exempt
 def index(request):
     """
     This view returns index.html and reads all URLs from url dispatcher to generate automatic navigation.
@@ -41,3 +47,19 @@ def index(request):
             url_paths[url_title] = "/" + url_path
 
     return render(request, 'index.html', {"url_paths": url_paths})
+
+def test_page(request, id):
+    code = HtmlCode.objects.filter(id=id).first()
+    template = loader.get_template('test.html')
+    print(type(code.html))
+    context = {
+        'code': {'html':code.html},
+    }
+    return HttpResponse(template.render(context, request))
+
+def results(request, question_id):
+    response = "You're looking at the results of question %s."
+    return HttpResponse(response % question_id)
+
+def vote(request, question_id):
+    return HttpResponse("You're voting on question %s." % question_id)

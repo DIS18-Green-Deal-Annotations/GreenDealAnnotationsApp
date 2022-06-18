@@ -1,0 +1,36 @@
+;Fuel;Energy content by weight (lower calorific value, MJ/kg);Energy content by volume (lower calorific value, MJ/l)
+0;FUELS FROM BIOMASS AND/OR BIOMASS PROCESSING OPERATIONS;;
+1;Bio-Propane;46;24
+2;Pure vegetable oil (oil produced from oil plants through pressing, extraction or comparable procedures, crude or refined but chemically unmodified);37;34
+3;Biodiesel - fatty acid methyl ester (methyl-ester produced from oil of biomass origin);37;33
+4;Biodiesel - fatty acid ethyl ester (ethyl-ester produced from oil of biomass origin);38;34
+5;Biogas that can be purified to natural gas quality;50;—
+6;Hydrotreated (thermochemically treated with hydrogen) oil of biomass origin, to be used for replacement of diesel;44;34
+7;Hydrotreated (thermochemically treated with hydrogen) oil of biomass origin, to be used for replacement of petrol;45;30
+8;Hydrotreated (thermochemically treated with hydrogen) oil of biomass origin, to be used for replacement of jet fuel;44;34
+9;Hydrotreated oil (thermochemically treated with hydrogen) of biomass origin, to be used for replacement of liquefied petroleum gas;46;24
+10;Co-processed oil (processed in a refinery simultaneously with fossil fuel) of biomass or pyrolysed biomass origin to be used for replacement of diesel;43;36
+11;Co-processed oil (processed in a refinery simultaneously with fossil fuel) of biomass or pyrolysed biomass origin, to be used to replace petrol;44;32
+12;Co-processed oil (processed in a refinery simultaneously with fossil fuel) of biomass or pyrolysed biomass origin, to be used to replace jet fuel;43;33
+13;Co-processed oil (processed in a refinery simultaneously with fossil fuel) of biomass or pyrolysed biomass origin, to be used to replace liquefied petroleum gas;46;23
+14;RENEWABLE FUELS THAT CAN BE PRODUCED FROM VARIOUS RENEWABLE SOURCES, INCLUDING BIOMASS;;
+15;Methanol from renewable sources;20;16
+16;Ethanol from renewable sources;27;21
+17;Propanol from renewable sources;31;25
+18;Butanol from renewable sources;33;27
+19;Fischer-Tropsch diesel (a synthetic hydrocarbon or mixture of synthetic hydrocarbons to be used for replacement of diesel);44;34
+20;Fischer-Tropsch petrol (a synthetic hydrocarbon or mixture of synthetic hydrocarbons produced from biomass, to be used for replacement of petrol);44;33
+21;Fischer-Tropsch jet fuel (a synthetic hydrocarbon or mixture of synthetic hydrocarbons produced from biomass, to be used for replacement of jet fuel);44;33
+22;Fischer-Tropsch liquefied petroleum gas (a synthetic hydrocarbon or mixture of synthetic hydrocarbons, to be used for replacement of liquefied petroleum gas;46;24
+23;DME (dimethylether);28;19
+24;Hydrogen from renewable sources;120;—
+25;ETBE (ethyl-tertio-butyl-ether produced on the basis of ethanol);36 (of which 37 % from renewable sources);27 (of which 37 % from renewable sources)
+26;MTBE (methyl-tertio-butyl-ether produced on the basis of methanol);35 (of which 22 % from renewable sources);26 (of which 22 % from renewable sources)
+27;TAEE (tertiary-amyl-ethyl-ether produced on the basis of ethanol);38 (of which 29 % from renewable sources);29 (of which 29 % from renewable sources)
+28;TAME (tertiary-amyl-methyl-ether produced on the basis of methanol);36 (of which 18 % from renewable sources);28 (of which 18 % from renewable sources)
+29;THxEE (tertiary-hexyl-ethyl-ether produced on the basis of ethanol);38 (of which 25 % from renewable sources);30 (of which 25 % from renewable sources)
+30;THxME (tertiary-hexyl-methyl-ether produced on the basis of methanol);38 of which 14 % from renewable sources);30 (of which 14 % from renewable sources)
+31;NON-RENEWABLE FUELS;;
+32;Petrol;43;32
+33;Diesel;43;36
+34;Hydrogen from non-renewable sources;120;—
