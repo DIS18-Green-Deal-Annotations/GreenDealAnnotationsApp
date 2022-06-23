@@ -166,7 +166,7 @@ def init_doc_obj():
                  "2021-07-14" #"14.7.2021"
     )
     
-    list = [doc_1, doc_2]
+    list = [doc_1, doc_2, doc_3]
 
     return list
 
@@ -322,8 +322,8 @@ def normalize_date(df): # helga
         'today':[str(dt.datetime.now())],
         'the current day':[str(dt.datetime.now())],
         'the last two years':[str(dt.datetime.now().year+2)],
-        'the past 10 years':[str(dt.datetime.now().year-10],
-        'the past years':[str(dt.datetime.now().year-5],
+        'the past 10 years':[str(dt.datetime.now().year-10)],
+        'the past years':[str(dt.datetime.now().year-5)],
         'the next years':[str(dt.datetime.now().year+5)],
         'this decade':['01-01-2020'],
         'the next decade':['01-01-2030'],
@@ -339,7 +339,7 @@ def normalize_date(df): # helga
         '2025-2032':['01-01-2025'],
         'the last 16 years':[str(dt.datetime.now().year-16)],
         'the period 2023 to 2025':['01-01-2023'],
-        'the period 2021 to 2030':[],
+        #'the period 2021 to 2030':[],
         'the beginning of 2021':['01-01-2021'],
         'end-2019':['31-12-2019'],
         '13 november 2020 to 5':['13-11-2020'],
@@ -398,7 +398,7 @@ def normalize_date(df): # helga
         '2050 ⇦':['01-01-2050'],
         'years 2017, 2018':['01-01-2017'],
         '2050 70':['01-01-2050'],
-        'up to 31 december 2023':[],
+        #'up to 31 december 2023':[],
         'the period 2021 to':['01-01-2021'],
         'december 2030 ⇨ ':['31-12-2030'],
         'the year 2019':['01-01-2019'],
@@ -477,7 +477,7 @@ def normalize_date(df): # helga
         '2030 39':['01-01-2030'],
         'the end of 2021':['31-12-2021'],
         '2013-2018':['01-01-2013'],
-        '2003-2007':['01-01-2003']]
+        '2003-2007':['01-01-2003']
         }
     
     # set all strings to lower case to match with relTempExp dictionary
