@@ -1,10 +1,24 @@
 # -*- coding: utf-8 -*-
 import os
 import csv
+import pandas as pd
 from pandarallel import pandarallel
+
+from apps.document_classification.models import DocumentClassification
+
 pandarallel.initialize()
 import re
 
+def persist_to_db(row):
+    model = (DocumentClassification)
+    model.header = row.header
+    model.header2 = row.header2
+    model.body = row.body
+    model.doctype = row.doctype
+    model.titreobjet = row.titreobjet
+    model.comnumber = row.comnumber
+    model.structure = row.structure
+    model.save()
 
 def check_string_contains_token(search_string):
     tokens = []
@@ -150,53 +164,6 @@ for filename in os.listdir(dir_path):
                                   '<p\sclass="li\sManualHeading2">([^°]+?.??)<p\sclass="li\sManualHeading2">|'
                                   '(<p\sclass="li\sManualHeading2">)([^°]+?.??<dl\sid="footnotes">)|'
                                   '(<p\sclass="li\sHeading2">)([^°]+?.??<dl\sid="footnotes">)', match)
-#define all structure Labels and find in the row header and append the results in structure row
-
-
-#not in these ducuments but maybe in future ones (which are legally binding)
-
-                    #if word in ['resolution'] not in tokens:
-                    #    tokens.append('Resolution (legally binding)')
-                    #if word in ['law'] not in tokens:
-                    #    tokens.append('Law (legally binding)')
-                    #if word in ['act'] not in tokens:
-                    #    tokens.append('Act (legally binding)')
-                    #if word in ['general'] and ['guidlines'] not in tokens:
-                    #    tokens.append('General guidlines (legally binding)')
-                    #if word in ['policy'] not in tokens:
-                    #    tokens.append('Policy (legally binding)')
-                    #if word in ['treaty'] not in tokens:
-                    #    tokens.append('Treaty (legally binding)')
-                    #if word in ['implementing'] and ['decision'] not in tokens:
-                    #    tokens.append('Implementing decision (legally binding)')
-
-#these words needed to be added in future in searchWords and in:
-                    # if word in [''] not in tokens:
-                    #    tokens.append('')
-
-                    #evaluation
-                    #report
-                    #correction
-                    #summary
-                    #announcement
-                    #impact assessment
-                    #draft decision
-                    #assasement
-                    #reference
-                    #provision
-                    #proportionality
-                    #subsidiarity
-                    #corrigendum
-                    #protocol
-                    #opinion
-                    #budget
-                    #announcements
-                    #information
-                    #note
-                    #judgment
-                    #guideline
-                    #recommendation
-                    #ex-post-evaluation
 
             tokens = check_string_contains_token(str(typedudocument))
             tokens += check_string_contains_token(str(titreobjet))
@@ -248,41 +215,8 @@ for filename in os.listdir(dir_path):
     for header in heading2:
         heading2.append(re.sub('(<.*?>)|(\\\\n)|(\\\\r)|(\\\\xe2\\\\x80\\\\x..)', '', str(header2)))
         match = re.sub('(<.*?>)|(\\\\n)|(\\\\r)|(\\\\xe2\\\\x80\\\\x..)', '', str(match))
-#tokenisierung
-    # tokenizer = RegexpTokenizer(r'\w+')
-    #
-    # writer.writerow["tokens"] = (lambda row: tokenizer.tokenize(row["header"].lower()), axis=1)
-    #
-    # for i in data['tokens']:
-    #     if ('legal' in i or 'basis' in i):
-    #         print("Legal Basis")
-    #     if ('proposal' in i):
-    #         print("Proposal")
-    #     else:
-    #         print("")
 f.close()
-
-########################
-# Für <p class="li Heading1" id="_GoBack"> und <p class="li Heading1"> (Dok1)
-
-# Für <p class="li ManualHeading1"> <p class="li ManualHeading2"> <p class="li ManualHeading3"> (Dok2, Dok6, Dok7, Dok8, Dok9, Dok12, Dok13, Dok15, Dok16, Dok17) (Dok3 hat kein <p class="li ManualHeading2"> sondern <span>• </span>) (mix aus <p class="li ManualHeading2"> und <span>• </span> bei Dok4)
-
-# muss evtl. noch bearbeitet werden
-# Für Dok5  <p id="_GoBack" class="Exposdesmotifstitre"> und dann kommt <span>1.</span> <span>2.</span> und innerhalb <span>•</span>
-
-# Für Dok10 und Dok18 nur mit Beatifulsoup: <p class="Typedudocument_cp">...</p> und <p class="Titreobjet_cp">...</p>
-##########################
-
-# pattern = re.compile(r'(<p\sclass="li\sHeading1">[^°]+?.?<p\sclass="li\sHeading1">)')
-# string = dokstring.rstrip().lstrip().strip().replace('\n','')
-
-# headers1 = re.findall('(<p\sclass="li\sHeading1\sid="_GoBack">)([^°]+?.??<p\sclass="li\sHeading1">?<=)|(<p\sclass="li\sHeading1">)([^°]+?.??<p\sclass="li\sHeading1">?<=)|(?=<p\sclass="li\sHeading1">)([^°]+?.??<dl\sid="footnotes">)|(<p\sclass="li\sManualHeading1">)([^°]+?.??<p\sclass="li\sManualHeading1">?<=)|(<p\sclass="li\sManualHeading1">)([^°]+?.??<dl\sid="footnotes">)|(?<=<p\sid="_GoBack"\sclass="Exposdesmotifstitre>)([^°]+?.??<p\sclass="li\sHeading1">?<=)',
-#                       dokstring)
-
-
-# for word2 in searchWords:
-#   if (typedudocument.find[word2] != -1):
-#      if word2 in ['COMMUNICATION'] and 'Communication' not in tokens:
-#         tokens.append('Communication')
-#    if word2 in ['REGULATION'] and 'Regulation' not in tokens:
-#       tokens.append('Regulation')
+df = pd.read_csv('results.csv', sep=';')
+print(df)
+for row in df.itertuples(index=True, name='Pandas'):
+    persist_to_db(row)

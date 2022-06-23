@@ -30,3 +30,5 @@ urllib3==1.26.9
 w3lib==1.22.0
 websockets==10.3
 zipp==3.8.0
+spacy==3.3.1
+pandarallel==1.6.1
