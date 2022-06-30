@@ -12,13 +12,13 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='DateExtraction',
+            name='TimelineDB',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('DocName', models.CharField(max_length=50)),
-                ('DocSentence', models.TextField()),
-                ('DateLabel', models.CharField(max_length=10)),
-                ('IsoDate', models.CharField(max_length=10)),
+                ('docname', models.CharField(max_length=50)),
+                ('docsentence', models.TextField()),
+                ('datelabel', models.CharField(max_length=10)),
+                ('isodate', models.CharField(max_length=10)),
             ],
         ),
     ]

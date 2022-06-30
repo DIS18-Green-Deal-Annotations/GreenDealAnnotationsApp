@@ -1,0 +1,16 @@
+;Heading of multiannual financial framework;Heading of multiannual financial framework.1;Heading of multiannual financial framework.2;Heading of multiannual financial framework.3;Heading of multiannual financial framework.4;3;3.1;'natural resources and environment';'natural resources and environment'.1;'natural resources and environment'.2;'natural resources and environment'.3
+0;;;;;;;;;;;
+1;067;;;2023;2024;2024;2025;2025;2026;2027;TOTAL
+2;Operational appropriations;Operational appropriations;Operational appropriations;Operational appropriations;Operational appropriations;Operational appropriations;Operational appropriations;Operational appropriations;Operational appropriations;Operational appropriations;Operational appropriations
+3;09 02 03;Commitments;(1);1000;1000;1000;3000;3000;;2000;7000
+4;;Payments;(2);;0400;0400;1000;1000;1800;1800;5000
+5;Appropriations of an administrative nature financed from the envelope of specific programmes;Appropriations of an administrative nature financed from the envelope of specific programmes;Appropriations of an administrative nature financed from the envelope of specific programmes;Appropriations of an administrative nature financed from the envelope of specific programmes;Appropriations of an administrative nature financed from the envelope of specific programmes;Appropriations of an administrative nature financed from the envelope of specific programmes;Appropriations of an administrative nature financed from the envelope of specific programmes;Appropriations of an administrative nature financed from the envelope of specific programmes;Appropriations of an administrative nature financed from the envelope of specific programmes;Appropriations of an administrative nature financed from the envelope of specific programmes;Appropriations of an administrative nature financed from the envelope of specific programmes
+6;09 01 01 01;;(3);;;;0192;0192;0042;0067;0301
+7;TOTAL appropriations DG CLIMA;Commitments;= 1 + 3;1000;1000;1000;3192;3192;0042;2067;7301
+8;;Payments;= 2 + 3;-;0400;0400;1192;1192;1842;1867;5301
+9;;;;;;;;;;;
+10;TOTAL operational appropriations;Commitments;(4);1000;1000;1000;3192;3192;0042;2067;7301
+11;;Payments;(5);;0400;0400;1192;1192;1842;1867;5301
+12;TOTAL appropriations of an administrative nature financed from the envelope for specific programmes;TOTAL appropriations of an administrative nature financed from the envelope for specific programmes;(6);;;;;;;;
+13;TOTAL appropriations under HEADING 3 of the multiannual financial framework;Commitments;= 4+ 6;1000;1000;1000;3192;3192;0042;2067;7301
+14;;Payments;= 5+ 6;-;0400;0400;1192;1192;1842;1867;5301

@@ -1,14 +1,89 @@
 # GreenDealAnnotationsApp
 
-# CHANGELOG
-## kommentar von oliver 15.04.2022:
-- änderungen an apps/date_extraction
-    - die timeline aus der date extraction gruppe übernommen
-        - abrufbar unter: http://127.0.0.1:8000/timeline/
-        - die timeline zieht ihre daten noch aus einer csv datei mit den vorher extrahierten sätzen (keine live scrapper daten)
-    - neues modell der db hinzugefügt und mit testdaten gefüllt
-        - spalten des modell lauten: DocName, DocSentence, DateLabel, IsoDate
-- änderungen an apps/core
-    - neu erstelltes mdell der admin page hinzugefügt (admin.py)
-    - code in models.py auskommentiert, da dieser code zu fehlern geführt hat. wahrscheinlich is es noch code aus den schulungsterminen?
-- urls.py der timeline url erweitert, damit die timeline url erreichbar ist
+# GEÄNDERTE README BEACHTEN:
+
+## Installation
+
+Für Entwicklung:
+`pip install -r requirements/dev.txt`
+Für Produktion:
+`pip install -r requirements/dev.txt`
+
+Erklärung:
+Alle benötigten Pakete sind im Ordner `requirements` hinterlegt.
+In der Datei `_base.txt` weren alle Pakete eingetragen die immer benötigt werden.
+Über `dev.txt` werden alle Pakete aus `_base.txt` installiert sowie Pakete die nur während der Entwicklung, 
+also beispielsweise Testsuites, revelant sind.
+Analog werden über `prod.txt` alle Pakete aus `_base.txt` installiert sowie Pakete die nur während 
+des Deployments revelant sind.
+
+## Tests und Testdaten für DB
+
+Dateien die mit `test_` starten werden von Django als Tests erkannt.
+Diese können mit `manage.py test` ausgeführt werden.
+
+Ein Beispiel aus der Dokumentation:
+```
+from django.test import TestCase
+from myapp.models import Animal
+
+class AnimalTestCase(TestCase):
+    def setUp(self):
+        Animal.objects.create(name="lion", sound="roar")
+        Animal.objects.create(name="cat", sound="meow")
+
+    def test_animals_can_speak(self):
+        """Animals that can speak are correctly identified"""
+        lion = Animal.objects.get(name="lion")
+        cat = Animal.objects.get(name="cat")
+        self.assertEqual(lion.speak(), 'The lion says "roar"')
+        self.assertEqual(cat.speak(), 'The cat says "meow"')
+```
+
+
+### Skript für Testdaten manuell erstellen
+Analog kann auch ein Skript erstellt werden um Testdaten zu generieren.
+
+Beispielsweise so könnte ein Skript für eure Gruppe aussehen um für eure Models Daten zu generieren:
+
+```
+from mygroup.models import MyModel
+
+def setupTestDataForMyModel():
+    MyModel.objects.create(name="..." ...)
+```
+
+(bitte sobald erstellt in der Readme erwähnen damit andere Gruppen wissen wie sie euer Skript für Testdaten starten können)
+
+### Skript für Testdaten automatisiert erstellen
+
+Einfacher wäre es mit "fixtures" zu arbeiten.
+Wenn ihr Daten in der DB erstellt wurden kann mit `manage.py dumpdata` eine fixtures-Datei, also ein Export erstellt werden.
+
+Anschließen muss im Ordner der jeweiligen App ein Ordner "fixtures" erstellt werden.
+Die Datei/en werden dort platziert.
+
+Ein Beispiel aus der Django Dokumentation wenn eine fixture mit Namen `bird` generiert wurde:
+
+```
+from django.test import TestCase
+from myapp.models import Animal
+
+class AnimalTestCase(TestCase):
+    fixtures = ['birds']
+
+    def setUp(self):
+        # Test definitions as before.
+        call_setup_methods()
+
+    def test_fluffy_animals(self):
+        # A test that uses the fixtures.
+        call_some_test_code()
+```
+
+Abseits vom Erstellen/Starten von Tests bei den die Daten schon geladen wurden kann die Funktion auch genutzt werden
+ um nur die Daten aus der fixture wieder in die DB zu überspielen:
+`AnimalTestCase.setUp()`
+
+(Hinweis: bevor Django die Daten in die DB spielt werden alle aktuellen Daten aus der DB entfernt!)
+(Hinweis2: die implizit aufgerufene Funktion `setUpTestData()` gehört zur Django-Klasse `TestCase`)
