@@ -54,4 +54,3 @@ def timeline(request):
     }
 
     return render(request, 'timeline.html', context)
-
