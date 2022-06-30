@@ -5,42 +5,33 @@
   {% load static %}
   <link rel="stylesheet" href="{% static 'style.css'%}">
   <script src="{% static 'vanillaSelectBox.js' %}"></script>
-  <script src="https://d3js.org/d3.v4.js"></script>
-  <script>    
-        // window.onload=function(){
-            // var filter_values = {"doc_name":["Social Climate Fund"],"start_date":[],"end_date":[]};
-            //document.getElementById("filter_dates").style.display='none'; 
-        //}
+  <script>
+
+    // Code wird beim Laden der Seite ausgeführt
+    // Legt Dropdown Werte feste
+    window.onload=function(){ 
+        if ("{{ length_docs }}" != "{{ length_filter_docs }}"){
+            vanilla_doc_name.setValue({{ doc_name|safe }});
+        }
+
+        vanilla_start_doc_date.setValue("{{ start_year }}");
+        vanilla_end_doc_date.setValue("{{ end_year }}");
+    };
+
   </script>
 
 </head>
 
 <body>
 
-<!----------------------------------------------------------->
-<!-- GET CERTAIN VALUES / FORMATS TEST -->
-<!-- 
-{% for doc in doc_names_filter %}
-    <div> {{ doc }} </div>
-{% endfor %}
-
-{% for year in year_filter %}
-    <div> {{ year|slice:":4" }} </div>
-{% endfor %}
-
-<div>{{ data|length }}</div>
-
-{% for obj in filter_data %}
-    <div> {{ obj }} </div>
-{% endfor %} -->
-
-<!----------------------------------------------------------->
-
     <div class="container">
         <div class="wrapper">
             <section id="top">
             <h1> Green Deal Annotation </h1>
             <h2>Timeline</h2>
+            
+            <!--------------------------------------EINLEITUNG---------------------------------------->
+
             <p class="introduction">
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor 
                 invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam 
@@ -72,13 +63,17 @@
             </p>
             </section>
             <div class="row">
+                
+                <!-----------------------------------FILTER-PANEL------------------------------------------->
+
                 <div id="Filter" class="col-md-4 fixed-sidebar">
-                    <div id="number-participants"></div>
-                    
+                    <div id="number_entries"></div>
+                    <!--  hier werden die Container für die einzelnen Filterparts aufgesetzt 
+                    und die select-Optionen mit den möglichen Optionen aus der Datenbank befüllt -->
                     <p class="filter_parts">
                         <label for="doc_name">Document Name</label>
                         <br>
-                        <select onchange="getDropdownValue()" multiple="" id="doc_name" size="2">
+                        <select onchange="get_dropdown_value()" multiple="" id="doc_name" size="2">
                             {% for doc in doc_names_filter %}
                                 <option value="{{ doc }}"> "{{ doc }}" </option>
                             {% endfor %}
@@ -88,47 +83,43 @@
                      <p class="filter_parts">
                         <label for="start_date">Start Year</label>
                         <br>
-                        <select onchange="getDropdownValue()"  id="start_date" size="2" >
+                        <select onchange="get_dropdown_value()"  id="start_date" size="2" >
                             {% for year in year_filter %}
                                 <option value="{{ year|slice:':4' }}"> {{ year|slice:":4" }} </option>
                             {% endfor %}
                         </select>
                     </p>
-
-                    <!-- <button class="demo" style="width:140px;" onClick="document.getElementById('chosenYear').innerHTML=document.getElementById('start_date').value;">get select value</button>
-			        <span id="chosenYear"></span> -->
-                    
-                    <!--document.getElementById('start_date').value-->
-                    
 
                     <p class="filter_parts">
                         <label for="end_date">End Year</label>
                         <br>
-                        <select onchange="getDropdownValue()"  id="end_date" size="2" >
+                        <select onchange="get_dropdown_value()"  id="end_date" size="2" >
                             {% for year in year_filter %}
                                 <option value="{{ year|slice:':4' }}"> {{ year|slice:":4" }} </option>
                             {% endfor %}
                         </select>
                     </p>
 
-                    <div id="submit_filter" onclick="filter_data()"> Submit </div>
+                    <div id="submit_filter" onclick="filter_url()"> Submit </div>
+                                        
                     <div id="reset" onclick="reset()"> Reset </div>
 
                 </div>
 
-                <!------------------------------------------------------------------------------------------->
+                <!-----------------------------------TIMELINE------------------------------------------->
                 
                 <div class="col-md-8">
 
                     <div id="timeline">
-                        
+                    
                         <ul id="dates">
-                            
+                        <!-- unsere komplette Timeline wird durch dieses Jinja Template erstellt;
+                        dafür werden alle Einträge in der Datenbank durchlaufen -->
                             {% for col in data %}
 
                                 <li>
-                                    <span class="date"> {{ col.IsoDate }} </span>
-                                    <p class="sentence"> {{ col.DocSentence }} </p>
+                                    <span class="date"> {{ col.isodate }} </span>
+                                    <p class="sentence"> {{ col.docsentence }} </p>
                                 </li>
                                                                 
                             {% endfor %}   
@@ -149,15 +140,14 @@
 
 <script>
 
-/***************************************************************************************************/
+/**********************************DROPDOWNS******************************************/
 
-    // builds dropdowns
+    // Die Dropdowns werden hier definiert und das Aussehen dieser festgelegt
     vanilla_doc_name = new vanillaSelectBox("#doc_name",
         {
-        "maxOptionWidth":250, 
+        "maxOptionWidth":370, 
         "maxHeight": 200,
         "minWidth": 280,
-        // "search": true,
         translations: { "all": "All", "items": "selected" },
         "placeHolder": "Select..." }
         );
@@ -183,64 +173,43 @@
             "placeHolder": "Select..." }
         );
        
-/***************************************************************************************************/
-// FILTER WON'T WORK WITH THE CURRENT SETUP (JINJA TEMPLATES); IGNORE THE FOLLOWING BIT 
+/********************************FILTERUNG*UND*WEITERLEITUNG***************************************/
 
-    document.getElementById("number-participants").textContent=("{{ data|length }}");
-    
-    var filter_values = {"doc_name":[],"start_date":[],"end_date":[]};
+    // Anzahl der Einträge
+    document.getElementById("number_entries").textContent=("{{ data|length }}");
 
-    const range = (min, max) => [...Array(max - min + 1).keys()].map(i => i + min);
+    // Zieht sich die ausgewählten Werte im Dropdown und schreibt sie in ein dictionary
+    var filter_values = {};
 
-    function getDropdownValue() {
+    function get_dropdown_value() {
 
-        filter_values["doc_name"] = document.getElementById('doc_name').value;
+        filter_values["doc_name"] = Array.from(document.querySelectorAll('#doc_name option:checked')).map(el => el.value);
         filter_values["start_date"] = document.getElementById('start_date').value;
         filter_values["end_date"] = document.getElementById('end_date').value;
-        if (filter_values["start_date"] && filter_values["end_date"] != []){
-            filter_values["date_range"] = range(parseInt(filter_values["start_date"]),
-                                                parseInt(filter_values["end_date"]));
-        }
-
     }
 
-    // reset button: empties selected options
+    // Encoded die ausgewählten Filterwerte (dict) in einen str, baut eine URL 
+    // in der der str als Query mitgegeben wird und leitet den User auf die Seite (View) weiter
+    function filter_url(){
+
+        var str = [];
+        for(var p in filter_values){
+           str.push(encodeURIComponent(p) + "=" + encodeURIComponent(filter_values[p]));
+        }
+
+        str = "?" + str.join("&") + "#timeline";
+        window.location = str;
+
+    }
+        
+    // Reset Button, löscht die ausgewählten Filter und die Werte aus dem Dictionary,
+    // leitet anschließend auf die Seite (View) mit den ungefilterten Daten
     function reset(){ 
         vanilla_doc_name.empty();
         vanilla_start_doc_date.empty();
         vanilla_end_doc_date.empty();
-
-        document.getElementById("number-participants").textContent=("{{ data|length }}");
-        // filtered_data = "{{ data }}";
-
+        window.location = "?doc_name=&start_date=&end_date=#timeline"
     }
 
-    function filter_data(){
-        // {{ doc.DocName }} == filter_values["doc_name"]  
-        // {{ doc.IsoDate }} >= filter_values["start_date"] && {{ doc.IsoDate }}  <= filter_values["end_date"]
-
-        /*
-          if (Object.keys(filter_values).length > 0) {  
-            for (f in filter_values) {                  
-              if (filter_values[f].length == 0) { 
-                continue;
-              }
-        
-              filtered_data = filtered_data.filter(function(d){    
-                if (filter[f].includes(d[f])) {  
-                  return d;
-                }
-              });
-            }
-          }
-        
-        */
-
-
-        document.getElementById("number-participants").textContent=("{{ filter_data|length }}");
-          
-        
-    } 
-
-        
+       
 </script>
