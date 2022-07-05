@@ -4,6 +4,7 @@ from django.db import models
 # Create your models here.
 
 class DocumentClassification(models.Model):
+    id = models.BigAutoField(primary_key=True)
     header = models.TextField()
     header2 = models.TextField()
     body = models.TextField()
