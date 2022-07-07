@@ -1,22 +1,65 @@
 {% extends '../../utils/base.html' %}
 
 {% block title %}
+    GreenDeal Document {{ document.document }}
 {% endblock %}
 
 {% block main %}
-<main style="height: 90vh">
-    <div class="container" style="height: 100%">
-      <div class="row" style="height: 100%">
-        <div class="col">
-          Column
+    <main style="height: 90vh">
+        <div class="container border border-dark">
+            <div class="row border border-dark">
+                <div class="col-4 border border-dark">
+                    <div class="row border border-dark">
+                        <h2>Document Meta-Data</h2>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Meta</th>
+                                <th scope="col">Description</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <th scope="row">Local-Id</th>
+                                <td>{{ document.id }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">CELEX / COM ID</th>
+                                <td>{{ document.document }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row border border-dark">
+                        {# TODO: talk to table extraction group #}
+                    </div>
+                    <div class="row border border-dark">
+                        <h2>External Links in Document</h2>
+
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Item</th>
+                                <th scope="col">Go to</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for href, title in all_links.items %}
+                                <tr>
+                                    <td>{{ title }}</td>
+                                    <td><a href="{{ href }}" class="btn btn-primary">Link</a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="col border border-dark">
+                    <h2>Document Contents</h2>
+                    {{ document.html | safe }}
+                </div>
+            </div>
         </div>
-        <div class="col">
-          {{ code.html | safe }}
-        </div>
-        <div class="col">
-          Column
-        </div>
-      </div>
-    </div>
-</main>
+    </main>
 {% endblock %}

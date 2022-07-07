@@ -5,7 +5,6 @@ from re import escape as reescape
 
 # django imports
 from django.shortcuts import render
-from django.urls import get_resolver
 from django.views.decorators.csrf import csrf_exempt
 
 # custom imports
@@ -14,52 +13,41 @@ from .models import HtmlCode, DateExtraction
 
 @csrf_exempt
 def index(request):
-    """
-    This view returns index.html and reads all URLs from url dispatcher to generate automatic navigation.
-
-    The variable "excludes" may include URL names, namely the last string after "/" in a URL, to be excluded from
-    automatic navigation creation for paths that shouldn't be exposed to the user (like the route to robots.txt).
-    """
-
-    excludes = ['robots.txt', 'admin']
-    url_patterns = get_resolver().url_patterns
-    url_paths = {}
-
-    for url in url_patterns:
-        # matches URLs in the extracted pattern.
-        # Note: "'.*'" won't work because urls using include extract like this:
-        # ["'apps.date_extraction.urls'", "'GreenDealAnnotationsApp/apps/date_extraction/urls.py'", "'timeline/'"]
-        pattern_for_url = re.compile(r"'[^']*'")
-        url_content = re.findall(pattern_for_url, str(url))
-
-        url_path = url_content[-1]  # see Note before which is the reasoning selecting -1 in case of multiple finds
-        url_path = url_path[1:-1]  # matching include apostrophes which must be excluded
-
-        pattern_for_title = re.compile(r"[^\/]*")
-        url_title = re.findall(pattern_for_title, str(url_path))
-
-        non_empty_url_title = [x for x in url_title if x]  # remove empty strings from list
-
-        url_title = 'home' if len(non_empty_url_title) == 0 else str(non_empty_url_title[-1])
-        # as index page has usually root url '/'; set this one to "home" else
-        # get last path element as name, e.g. original path "/index/test/me" would finally return "me"
-
-        if url_title not in excludes:
-            url_paths[url_title] = "/" + url_path
-
-    return render(request, 'index.html', {"url_paths": url_paths})
+    return render(request, 'index.html')
 
 
 # ----- GRUPPE DOCUMENT LINKING -----
 
+@csrf_exempt
+def browse_documents(request):
+    documents = HtmlCode.objects.all()
+    context = {
+        'documents': documents,
+    }
+    return render(request=request, template_name='./apps/doc_linking/browse_documents.html', context=context)
+
 
 @csrf_exempt
 def DocumentViewer(request, id):
-    code = HtmlCode.objects.get(id__exact=id)
-    context = {
-        'code': {'html': code.html}
-    }
+    documents = HtmlCode.objects.all()
+    document = HtmlCode.objects.get(id__exact=id)
+    links_in_document = re.findall(r'<a[^<]*href="([^"]*)"[^>]*>([^<]*)<\/a', document.html)
 
+    all_links = {}
+    for link in links_in_document:
+        link = list(link)
+        link[1].replace('\n', ' ').replace('\r', '')
+        link[1] = re.sub(' +', ' ', link[1])
+        if len(re.sub(' ', '', link[1])) > 6:
+            link[0].replace('\n', ' ').replace('\r', '')
+            link[0] = re.sub(' +', ' ', link[0])
+            all_links[link[0]] = link[1]
+
+    context = {
+        'document': document,
+        'documents': documents,
+        'all_links': all_links,
+    }
     return render(request=request, template_name='./apps/doc_linking/document_viewer.html', context=context)
 
 
