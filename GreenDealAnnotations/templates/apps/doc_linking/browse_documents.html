@@ -1,0 +1,35 @@
+{% extends '../../utils/base.html' %}
+
+{% block title %}
+    Browse all GreenDeal Documents
+{% endblock %}
+
+{% block main %}
+    <main style="height: 90vh">
+        <div class="container border border-dark">
+            <h2>Browse GreenDeal Documents</h2>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Local-Id</th>
+                    <th scope="col">CELEX / COM Id</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for document in documents %}
+                    <tr>
+                        <th scope="row">{{ document.id }}</th>
+                        <td>{{ document.document }}</td>
+                        <td>
+                            <a href="{% url 'document_details' id=document.id %}" class="btn btn-primary">
+                                Open document
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+{% endblock %}
