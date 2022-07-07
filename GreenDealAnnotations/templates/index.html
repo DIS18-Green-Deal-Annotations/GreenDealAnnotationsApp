@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Annotations to easily explore offical european green deal documents."/>
+    <link rel="canonical" href="https://127.0.0.1:8000/" /> {# TODO: correct link once website is online #}
+    <title>Green Deal Annotations</title>
+    <style>
+        nav {
+            padding: 1rem 0;
+            display: flex;
+            justify-content: space-evenly;
+        }
+
+        /* source for a design: https://fdossena.com/?p=html5cool/buttons/i.frag */
+        a{
+            display:inline-block;
+            padding:0.35em 1.2em;
+            border:0.1em solid #FFFFFF;
+            margin:0 0.3em 0.3em 0;
+            border-radius:0.12em;
+            box-sizing: border-box;
+            text-decoration:none;
+            font-family:'Roboto',sans-serif;
+            font-weight:300;
+            color:#FFFFFF;
+            text-align:center;
+            transition: all 0.2s;
+        }
+        a:hover{
+            color:#000000;
+            background-color:#FFFFFF;
+        }
+        @media all and (max-width:30em){
+            a{
+                display:block;
+                margin:0.4em auto;
+            }
+}
+
+    </style>
+</head>
+<body style="width: 100vw; height: 90vh; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; background-color: #5c7c60">
+
+<main style="text-align: center;">
+    <div>
+        <h1>Green Dean Annotations</h1>
+        <h2>A project to explore green deal documents by students of the University of Applied Sciences Cologne</h2>
+    </div>
+    <nav>
+        {# nav elements will be automatically generated in the index view inside core app #}
+        {% for title, path in url_paths.items %}
+            <a href="{{ path }}">{{ title }}</a>
+        {% endfor %}
+    </nav>
+</main>
+
+</body>
+</html>

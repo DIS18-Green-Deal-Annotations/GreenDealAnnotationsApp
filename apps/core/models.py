@@ -1,12 +1,7 @@
 from django.db import models
+import uuid
 
-
-class TestModel(models.Model):
-    text = models.TextField()
-
-    def __str__(self):
-        return 'EinTestModell mit der ID: ' + str(self.id)
-
-    class Meta:
-        verbose_name = 'TestModell'
-        verbose_name_plural = 'TestModelle'
+class HtmlCode(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    html = models.TextField()
+    document = models.TextField(default="no_title")

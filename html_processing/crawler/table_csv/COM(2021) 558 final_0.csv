@@ -1,0 +1,6 @@
+;Type of the unit;Default power to heat ratio, C
+0;Combined cycle gas turbine with heat recovery;95
+1;Steam back pressure turbine;45
+2;Steam condensing extraction turbine;45
+3;Gas turbine with heat recovery;55
+4;Internal combustion engine;75
