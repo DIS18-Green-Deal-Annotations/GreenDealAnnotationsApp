@@ -48,18 +48,28 @@ def index(request):
 
     return render(request, 'index.html', {"url_paths": url_paths})
 
+
 def test_page(request, id):
     code = HtmlCode.objects.filter(id=id).first()
     template = loader.get_template('test.html')
     print(type(code.html))
     context = {
-        'code': {'html':code.html},
+        'code': {'html': code.html},
     }
     return HttpResponse(template.render(context, request))
+
 
 def results(request, question_id):
     response = "You're looking at the results of question %s."
     return HttpResponse(response % question_id)
 
+
 def vote(request, question_id):
     return HttpResponse("You're voting on question %s." % question_id)
+
+
+def DocumentViewer(request):
+
+    context = {}
+
+    return render(request=request, template_name='document_viewer.html', context=context)
