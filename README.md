@@ -17,6 +17,23 @@ also beispielsweise Testsuites, revelant sind.
 Analog werden über `prod.txt` alle Pakete aus `_base.txt` installiert sowie Pakete die nur während 
 des Deployments revelant sind.
 
+## Datenbank mit Daten befüllen
+
+Die Datei `setup.py` kann ausgeführt werden um die Skripte aller Gruppen zu starten die die Datenbank automatisch mit Daten befüllen.
+Vorher muss zusätzlich der Befehl `python -m spacy download en_core_web_sm` ausgeführt werden.
+
+## Arbeiten mit Django
+
+Der Ordner `core` enhält alle Dateien zum Arbeiten mit Django.
+Einzelne Apps pro Gruppe gibt es nicht mehr. Hier wurden alle Dateien zusammengefasst.
+
+Alle URLs sind jetzt in der gemeinsamen `GreenDealAnnotations/urls.py` Datei. Einzelne Dateien pro Gruppe gibt es nicht mehr.
+
+Im Ordner `GreenDealAnnotations/templates` liegen alle HTML-Dateien unserer Seiten.
+
+Der Ordner `GreenDealAnnotations/static` enthält alle statischen Dateien der Website, also CSS, JavaScript, und Bilder.
+Wie diese in HTML eingebunden werden kann man sich gut bei der Date Extraction Gruppe aus der Datei `GreenDealAnnotations/templates/apps/date_extraction/timeline.html` abgucken.
+
 ## Tests und Testdaten für DB
 
 Dateien die mit `test_` starten werden von Django als Tests erkannt.

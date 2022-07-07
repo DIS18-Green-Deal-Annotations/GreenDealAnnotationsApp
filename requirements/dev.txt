@@ -1,3 +1,8 @@
 -r _base.txt
 coverage
 pytest
+bs4
+spacy
+nltk
+pandas
+requests

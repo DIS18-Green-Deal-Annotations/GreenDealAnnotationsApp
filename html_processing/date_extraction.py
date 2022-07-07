@@ -1,19 +1,34 @@
-import os, sys
 from bs4 import BeautifulSoup
 import pandas as pd
-from regex import P
 import requests
-import re
+import sys
+from pathlib import Path
 import spacy
-import numpy as np
 import datetime as dt
 import nltk
 nltk.download('punkt')
 from nltk.tokenize import sent_tokenize
 
+import django
+from django.conf import settings
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+sys.path.append('./')
+settings.configure(
+    DJANGO_SETTINGS_MODULE='GreenDealAnnotations.settings',
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'GreenDealAnnotations/db.sqlite3',
+        }
+    },
+)
+django.setup()
+
 # django imports
-from django.core.management.base import BaseCommand, CommandError
-from apps.date_extraction.models import DateExtraction
+from django.core.management.base import BaseCommand
+from core.models import DateExtraction
 
 def init_doc_obj():
     """

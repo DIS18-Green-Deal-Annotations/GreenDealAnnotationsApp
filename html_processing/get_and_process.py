@@ -1,9 +1,8 @@
 import os
-from xxlimited import new
 
-from com_linking.extractor.extractor import COM_Extractor
-from com_linking.html_modifier.modifier import COM_Modifier
-from crawler.crawler import get_new
+from .com_linking.extractor.extractor import COM_Extractor
+from .com_linking.html_modifier.modifier import COM_Modifier
+from .crawler.crawler import get_new
 
 
 #execute crawler

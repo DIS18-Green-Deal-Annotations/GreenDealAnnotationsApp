@@ -1,4 +1,4 @@
-{% extends './utils/base.html' %}
+{% extends '../../utils/base.html' %}
 
 {% block title %}
 {% endblock %}
@@ -11,7 +11,7 @@
           Column
         </div>
         <div class="col">
-          Column
+          {{ code.html | safe }}
         </div>
         <div class="col">
           Column
