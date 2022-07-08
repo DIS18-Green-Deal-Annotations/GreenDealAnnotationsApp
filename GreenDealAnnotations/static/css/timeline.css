@@ -1,0 +1,109 @@
+/**************allgemein******************/
+ul,
+li {
+    list-style: none;
+    padding: 0;
+}
+
+.sentence {
+    text-align: justify;
+}
+
+#top {
+    padding: 5% !important;
+    width: 90% !important;
+    background: #fbfff7;
+    border-radius: 0.5rem;
+    margin-bottom: 5%;
+}
+
+h1,
+h2 {
+    font-size: 70px !important;
+    margin-left: 5%;
+    margin-top: 0;
+    margin-bottom: .5rem;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+h2 {
+    font-size: 50px;
+    margin-bottom: 30px;
+}
+
+ul#dates li {
+    padding-bottom: 1.5rem;
+    border-left: 1px solid #000000;
+    position: relative;
+    padding-left: 20px;
+    margin-left: 10px;
+}
+
+ul#dates li:last-child {
+    border: 0px;
+    padding-bottom: 0;
+}
+
+ul#dates li:before {
+    content: '';
+    width: 15px;
+    height: 15px;
+    background: white;
+    border: 1px solid #272727;
+    box-shadow: 3px 3px 0px #5c7c60;
+    box-shadow: 3px 3px 0px #b7c0b8;
+    border-radius: 50%;
+    position: absolute;
+    left: -10px;
+    top: 0px;
+}
+
+.date {
+    color: #3b3b3b;
+    font-family: sans-serif;
+    font-weight: bolder;
+    font-size: 130%;
+}
+
+body {
+    background: linear-gradient(45deg, #4e8a53d5, #c2d651c7);
+    font-family: sans-serif !important;
+    overflow-x: hidden;
+}
+
+.flex-column > * {
+    margin-top: 10px;
+}
+
+.fixed-sidebar-de {
+    position: sticky;
+    height: 550px;
+    padding: 30px 0;
+    background: rgb(221 232 204);
+    top: 9%;
+    bottom: auto;
+    padding: 15px 15px !important;
+    border-radius: .5rem !important;
+}
+
+#number_entries {
+    background: #fbfff7;
+    width: 50%;
+    font-size: 220%;
+    text-align: center;
+    margin-left: 20%;
+    padding-top: 8%;
+    padding-bottom: 8%;
+    border: 1px black solid;
+    margin-top: 30px;
+    margin-bottom: 60px !important;
+    position: relative;
+    margin-left: 25% !important;
+    border-radius: .25rem;
+}
+
+#timeline {
+    order: 2;
+    margin: auto;
+}
