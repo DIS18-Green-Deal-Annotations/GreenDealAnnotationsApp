@@ -86,7 +86,7 @@ def timeline(request):
     data = DateExtraction.objects.filter(
         isodate__regex='^({})'.format('|'.join(map(reescape, filter_values["date_range"]))),
         docname__in=filter_values["doc_name"]
-    )
+    ).order_by("isodate")
 
     # extrahiert alle Dokumentennamen und Jahreszahlen aus der Datenbank, um sie als Optionen in die Datenbank zu schreiben
     distinct_doc_names = DateExtraction.objects.all().values_list('docname', flat=True).distinct().order_by(

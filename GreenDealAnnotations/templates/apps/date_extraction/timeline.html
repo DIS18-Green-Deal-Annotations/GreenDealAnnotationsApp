@@ -92,6 +92,12 @@
         $('.js-example-basic-multiple').select2();
     });
 
+window.onload = function() {
+    $('#start_date').val(String({{ start_year }}));
+    $('#end_date').val(String({{ end_year }}));
+    /*$('#doc_name').val(['1', '2']); TODO*/
+};
+
 /********************************FILTERUNG*UND*WEITERLEITUNG***************************************/
 
     // Anzahl der Einträge
@@ -118,7 +124,6 @@
 
         str = "?" + str.join("&") + "#timeline";
         window.location = str;
-
     }
         
     // Reset Button, löscht die ausgewählten Filter und die Werte aus dem Dictionary,
