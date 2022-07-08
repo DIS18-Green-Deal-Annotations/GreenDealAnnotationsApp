@@ -4,6 +4,7 @@ import re
 from re import escape as reescape
 
 # django imports
+from django.db.models.functions import TruncYear
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
@@ -90,7 +91,12 @@ def timeline(request):
     # extrahiert alle Dokumentennamen und Jahreszahlen aus der Datenbank, um sie als Optionen in die Datenbank zu schreiben
     distinct_doc_names = DateExtraction.objects.all().values_list('docname', flat=True).distinct().order_by(
         "docname")  # distinct values
-    distinct_years = DateExtraction.objects.all().values_list('isodate', flat=True).distinct().order_by("isodate")
+    all_years = DateExtraction.objects.all().values_list('isodate', flat=True).distinct().order_by("isodate")
+
+    distinct_years = []
+    for year in all_years:
+        if not year[0:4] in distinct_years:
+            distinct_years.append(year[0:4])
 
     context = {
         "data": data,
