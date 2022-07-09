@@ -73,6 +73,7 @@
                                 <li>
                                     <span class="date"> {{ col.date_iso }} </span>
                                     <p class="sentence"> {{ col.sentence }} </p>
+                                    <a href="{% url "document_details" id=col.doc_reference.id %}" class="btn btn-secondary">Go to document</a>
                                 </li>
                             {% endfor %}
                         </ul>
