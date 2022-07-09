@@ -4,6 +4,19 @@
     GreenDeal Document {{ document.document }}
 {% endblock %}
 
+{% block navbar_inject %}
+    <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Go to Document
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        {% for document in documents %}
+            <li><a class="dropdown-item" href="{% url 'document_details' id=document.id %}">{{ document.eu_id }}</a></li>
+              {% endfor %}
+          </ul>
+        </li>
+{% endblock %}
+
 {% block main %}
     <main style="height: 90vh">
         <div class="container border border-dark">
