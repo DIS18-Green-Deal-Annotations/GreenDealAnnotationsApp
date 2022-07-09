@@ -85,12 +85,17 @@ def timeline(request):
     data = Sentence.objects.filter(
         date_iso__regex='^({})'.format('|'.join(map(reescape, filter_values["date_range"]))),
         doc_reference__title__in=filter_values["doc_name"]
-    )
+    ).order_by("date_iso")
 
     # extrahiert alle Dokumentennamen und Jahreszahlen aus der Datenbank, um sie als Optionen in die Datenbank zu schreiben
     distinct_doc_names = Sentence.objects.all().values_list('doc_reference__title', flat=True).distinct().order_by(
         "doc_reference__title")  # distinct values
-    distinct_years = Sentence.objects.all().values_list('date_iso', flat=True).distinct().order_by("date_iso")
+    all_years = Sentence.objects.all().values_list('date_iso', flat=True).distinct().order_by("date_iso")
+
+    distinct_years = []
+    for year in all_years:
+        if not year[0:4] in distinct_years:
+            distinct_years.append(year[0:4])
 
     context = {
         "data": data,

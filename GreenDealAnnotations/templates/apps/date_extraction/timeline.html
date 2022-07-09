@@ -1,179 +1,101 @@
+{% extends '../../utils/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<head>
-  <meta charset="utf-8">
-  <title>Green Deal Annotation - Timeline</title>
 
-  <link rel="stylesheet" href="{% static 'css/style.css'%}">
-  <script src="{% static 'js/vanillaSelectBox.js' %}"></script>
-  <script>
+{% block title %}
+    Green Deal Annotation - Timeline
+{% endblock %}
 
-    // Code wird beim Laden der Seite ausgeführt
-    // Legt Dropdown Werte feste
-    window.onload=function(){ 
-        if ("{{ length_docs }}" != "{{ length_filter_docs }}"){
-            vanilla_doc_name.setValue({{ doc_name|safe }});
-        }
+{% block head_inject %}
+    <link rel="stylesheet" href="{% static 'css/timeline.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+{% endblock %}
 
-        vanilla_start_doc_date.setValue("{{ start_year }}");
-        vanilla_end_doc_date.setValue("{{ end_year }}");
-    };
-
-  </script>
-
-</head>
-
-<body>
-
-    <div class="container">
-        <div class="wrapper">
-            <section id="top">
-            <h1> Green Deal Annotation </h1>
-            <h2>Timeline</h2>
-            
-            <!--------------------------------------EINLEITUNG---------------------------------------->
-
-            <p class="introduction">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor 
-                invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam 
-                et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est 
-                At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata 
-                sanctus est Lorem ipsum dolor sit amet. 
-                <br><br>      
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor 
-                invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. <br> 
-                At vero eos et accusam 
-                et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est 
-                At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata 
-                sanctus est Lorem ipsum dolor sit amet. 
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor 
-                invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam 
-                et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est 
-                At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata 
-                sanctus est Lorem ipsum dolor sit amet. 
-                <br><br>      
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor 
-                invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. <br> 
-                At vero eos et accusam 
-                et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est 
-                At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata 
-                sanctus est Lorem ipsum dolor sit amet. 
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor 
-                invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam 
-                et justo duo dolores et ea rebum. 
-            </p>
-            </section>
+{% block main %}
+    <main>
+        <div class="container bg-light rounded mt-2">
             <div class="row">
-                
-                <!-----------------------------------FILTER-PANEL------------------------------------------->
-
-                <div id="Filter" class="col-md-4 fixed-sidebar">
-                    <div id="number_entries"></div>
-                    <!--  hier werden die Container für die einzelnen Filterparts aufgesetzt 
-                    und die select-Optionen mit den möglichen Optionen aus der Datenbank befüllt -->
-                    <p class="filter_parts">
-                        <label for="doc_name">Document Name</label>
-                        <br>
-                        <select onchange="get_dropdown_value()" multiple="" id="doc_name" size="2">
-                            {% for doc in doc_names_filter %}
-                                <option value="{{ doc }}"> "{{ doc }}" </option>
-                            {% endfor %}
-                        </select>
+                <div class="col">
+                    <h2>Timeline</h2>
+                    <p>
+                        This timeline extracts all records from the European Green Deal documents that contain a date
+                        and sorts them in ascending order. In the left box, the number of results is displayed at the top.
+                        Below that, you can set various filters, such as specific documents or date boxes to limit the
+                        start and end period of the found dates in the search.
                     </p>
-                    
-                     <p class="filter_parts">
-                        <label for="start_date">Start Year</label>
-                        <br>
-                        <select onchange="get_dropdown_value()"  id="start_date" size="2" >
-                            {% for year in year_filter %}
-                                <option value="{{ year|slice:':4' }}"> {{ year|slice:":4" }} </option>
-                            {% endfor %}
-                        </select>
-                    </p>
-
-                    <p class="filter_parts">
-                        <label for="end_date">End Year</label>
-                        <br>
-                        <select onchange="get_dropdown_value()"  id="end_date" size="2" >
-                            {% for year in year_filter %}
-                                <option value="{{ year|slice:':4' }}"> {{ year|slice:":4" }} </option>
-                            {% endfor %}
-                        </select>
-                    </p>
-
-                    <div id="submit_filter" onclick="filter_url()"> Submit </div>
-                                        
-                    <div id="reset" onclick="reset()"> Reset </div>
-
                 </div>
-
+            </div>
+            <div class="row">
+                <!-----------------------------------FILTER-PANEL------------------------------------------->
+                <div class="col-4">
+                    <div id="Filter" class="col-md-4-de fixed-sidebar-de">
+                        <div class="d-flex flex-column">
+                        <div id="number_entries"></div>
+                        <!--  hier werden die Container für die einzelnen Filterparts aufgesetzt
+                        und die select-Optionen mit den möglichen Optionen aus der Datenbank befüllt -->
+                        <label for="doc_name">Document Name</label>
+                        <select class="js-example-basic-multiple" id="doc_name" onchange="get_dropdown_value()"
+                                name="doc_name" multiple="multiple">
+                            {% for doc in doc_names_filter %}
+                                <option value="{{ doc }}">{{ doc }}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="start_date">Start Year</label>
+                        <select onchange="get_dropdown_value()" id="start_date" class="js-example-basic-single"
+                                name="start_date">
+                            {% for year in year_filter %}
+                                <option value="{{ year|slice:':4' }}"> {{ year }} </option>
+                            {% endfor %}
+                        </select>
+                        <label for="end_date">End Year</label>
+                        <select onchange="get_dropdown_value()" id="end_date" class="js-example-basic-single"
+                                name="end_date">
+                            {% for year in year_filter %}
+                                <option value="{{ year|slice:':4' }}"> {{ year }} </option>
+                            {% endfor %}
+                        </select>
+                        <button type="button" class="btn btn-primary" id="submit_filter" onclick="filter_url()">
+                            Submit
+                        </button>
+                        <button type="button" class="btn btn-warning" id="reset" onclick="reset()"> Reset</button>
+                        </div>
+                    </div>
+                </div>
                 <!-----------------------------------TIMELINE------------------------------------------->
-                
-                <div class="col-md-8">
-
+                <div class="col-8">
                     <div id="timeline">
-                    
                         <ul id="dates">
-                        <!-- unsere komplette Timeline wird durch dieses Jinja Template erstellt;
-                        dafür werden alle Einträge in der Datenbank durchlaufen -->
+                            <!-- unsere komplette Timeline wird durch dieses Jinja Template erstellt;
+                            dafür werden alle Einträge in der Datenbank durchlaufen -->
                             {% for col in data %}
-
                                 <li>
                                     <span class="date"> {{ col.isodate }} </span>
                                     <p class="sentence"> {{ col.docsentence }} </p>
                                 </li>
-                                                                
-                            {% endfor %}   
-                                        
+                            {% endfor %}
                         </ul>
-                        
                     </div>
-
                 </div>
-
             </div>
-
         </div>
+    </main>
+{% endblock %}
 
-    </div>
-
-</body>
-
+{% block footer_script %}
 <script>
+    $(document).ready(function () {
+        $('.js-example-basic-single').select2();
+        $('.js-example-basic-multiple').select2();
+    });
 
-/**********************************DROPDOWNS******************************************/
+window.onload = function() {
+    $('#start_date').val(String({{ start_year }}));
+    $('#end_date').val(String({{ end_year }}));
+    /*$('#doc_name').val(['1', '2']); TODO*/
+};
 
-    // Die Dropdowns werden hier definiert und das Aussehen dieser festgelegt
-    vanilla_doc_name = new vanillaSelectBox("#doc_name",
-        {
-        "maxOptionWidth":370, 
-        "maxHeight": 200,
-        "minWidth": 280,
-        translations: { "all": "All", "items": "selected" },
-        "placeHolder": "Select..." }
-        );
-
-
-    vanilla_start_doc_date = new vanillaSelectBox("#start_date",
-        {
-            "maxOptionWidth":250, 
-            "maxHeight": 200,
-            "minWidth": 280,
-            // "search": true,
-            translations: { "all": "All", "items": "selected" },
-            "placeHolder": "Select..." }
-        );
-
-        vanilla_end_doc_date = new vanillaSelectBox("#end_date",
-        {
-            "maxOptionWidth":250, 
-            "maxHeight": 200,
-            "minWidth": 280,
-            // "search": true,
-            translations: { "all": "All", "items": "selected" },
-            "placeHolder": "Select..." }
-        );
-       
 /********************************FILTERUNG*UND*WEITERLEITUNG***************************************/
 
     // Anzahl der Einträge
@@ -184,7 +106,7 @@
 
     function get_dropdown_value() {
 
-        filter_values["doc_name"] = Array.from(document.querySelectorAll('#doc_name option:checked')).map(el => el.value);
+        filter_values["doc_name"] = $(".js-example-basic-multiple").select2("val");
         filter_values["start_date"] = document.getElementById('start_date').value;
         filter_values["end_date"] = document.getElementById('end_date').value;
     }
@@ -200,17 +122,12 @@
 
         str = "?" + str.join("&") + "#timeline";
         window.location = str;
-
     }
         
     // Reset Button, löscht die ausgewählten Filter und die Werte aus dem Dictionary,
     // leitet anschließend auf die Seite (View) mit den ungefilterten Daten
-    function reset(){ 
-        vanilla_doc_name.empty();
-        vanilla_start_doc_date.empty();
-        vanilla_end_doc_date.empty();
+    function reset(){
         window.location = "?doc_name=&start_date=&end_date=#timeline"
     }
-
-       
 </script>
+{% endblock %}
