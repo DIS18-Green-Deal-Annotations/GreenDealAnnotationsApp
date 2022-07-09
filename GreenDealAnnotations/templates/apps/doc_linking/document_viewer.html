@@ -25,7 +25,31 @@
                             </tr>
                             <tr>
                                 <th scope="row">CELEX / COM ID</th>
-                                <td>{{ document.document }}</td>
+                                <td>{{ document.eu_id }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Title</th>
+                                <td>{{ document.title }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Subtitle</th>
+                                <td>{{ document.subtitle }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Scope</th>
+                                <td>{{ document.scope }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Original URL</th>
+                                <td>{{ document.url }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">File type used</th>
+                                <td>{{ document.file_type }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Date published</th>
+                                <td>{{ document.publish_date }}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -57,7 +81,7 @@
                 </div>
                 <div class="col border border-dark">
                     <h2>Document Contents</h2>
-                    {{ document.html | safe }}
+                    {{ document.html_content | safe }}
                 </div>
             </div>
         </div>

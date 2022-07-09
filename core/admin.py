@@ -1,16 +1,16 @@
 from django.contrib import admin
 
-from .models import DateExtraction, HtmlCode
+from .models import Document, Sentence
 
 
-class DateExtractionAdmin(admin.ModelAdmin):
+class SentenceAdmin(admin.ModelAdmin):
     fields = ['__all__']
 
 
-class HtmlCodeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'document', 'html')
+class DocumentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'eu_id', 'html_content', 'title', 'subtitle', 'scope')
     # search_fields=('title', 'description') #create search field in the model admin
 
 
-admin.site.register(DateExtraction, DateExtractionAdmin)
-admin.site.register(HtmlCode, HtmlCodeAdmin)
+admin.site.register(Sentence, SentenceAdmin)
+admin.site.register(Document, DocumentAdmin)

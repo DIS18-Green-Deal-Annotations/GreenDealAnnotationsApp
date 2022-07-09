@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 # custom imports
-from .models import HtmlCode, DateExtraction
+from .models import Document, Sentence
 
 
 @csrf_exempt
@@ -20,7 +20,7 @@ def index(request):
 
 @csrf_exempt
 def browse_documents(request):
-    documents = HtmlCode.objects.all()
+    documents = Document.objects.all()
     context = {
         'documents': documents,
     }
@@ -29,9 +29,9 @@ def browse_documents(request):
 
 @csrf_exempt
 def DocumentViewer(request, id):
-    documents = HtmlCode.objects.all()
-    document = HtmlCode.objects.get(id__exact=id)
-    links_in_document = re.findall(r'<a[^<]*href="([^"]*)"[^>]*>([^<]*)<\/a', document.html)
+    documents = Document.objects.all()
+    document = Document.objects.get(id__exact=id)
+    links_in_document = re.findall(r'<a[^<]*href="([^"]*)"[^>]*>([^<]*)<\/a', document.html_content)
 
     all_links = {}
     for link in links_in_document:
@@ -66,31 +66,31 @@ def timeline(request):
     if (filter_values["doc_name"] != None and filter_values["doc_name"] != ""):
         filter_values["doc_name"] = filter_values["doc_name"].split(",")
     else:
-        filter_values["doc_name"] = DateExtraction.objects.all().values_list('docname', flat=True)
+        filter_values["doc_name"] = Sentence.objects.all().values_list('doc_reference__title', flat=True)
 
     if (filter_values["start_date"] != None and filter_values["start_date"] != ""):
         start = int(filter_values["start_date"])
     else:
-        start = DateExtraction.objects.all().values_list('isodate', flat=True).order_by("isodate").first()[:4]
+        start = Sentence.objects.all().values_list('date_iso', flat=True).order_by("date_iso").first()[:4]
 
     if (filter_values["end_date"] != None and filter_values["end_date"] != ""):
         end = int(filter_values["end_date"])
     else:
-        end = DateExtraction.objects.all().values_list('isodate', flat=True).order_by("isodate").last()[:4]
+        end = Sentence.objects.all().values_list('date_iso', flat=True).order_by("date_iso").last()[:4]
 
     # erstellt Liste für alle Werte zwischen dem ausgewählten Start und End Jahr
     filter_values["date_range"] = [str(x) for x in list(range(int(start), int(end) + 1))]
 
     # filtert die Daten aus der Datenbank basierend auf den ausgewählten Filter Values
-    data = DateExtraction.objects.filter(
-        isodate__regex='^({})'.format('|'.join(map(reescape, filter_values["date_range"]))),
-        docname__in=filter_values["doc_name"]
+    data = Sentence.objects.filter(
+        date_iso__regex='^({})'.format('|'.join(map(reescape, filter_values["date_range"]))),
+        doc_reference__title__in=filter_values["doc_name"]
     )
 
     # extrahiert alle Dokumentennamen und Jahreszahlen aus der Datenbank, um sie als Optionen in die Datenbank zu schreiben
-    distinct_doc_names = DateExtraction.objects.all().values_list('docname', flat=True).distinct().order_by(
-        "docname")  # distinct values
-    distinct_years = DateExtraction.objects.all().values_list('isodate', flat=True).distinct().order_by("isodate")
+    distinct_doc_names = Sentence.objects.all().values_list('doc_reference__title', flat=True).distinct().order_by(
+        "doc_reference__title")  # distinct values
+    distinct_years = Sentence.objects.all().values_list('date_iso', flat=True).distinct().order_by("date_iso")
 
     context = {
         "data": data,

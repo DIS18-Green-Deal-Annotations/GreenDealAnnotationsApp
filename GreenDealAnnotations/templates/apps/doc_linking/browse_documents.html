@@ -11,19 +11,26 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th scope="col">Local-Id</th>
-                    <th scope="col">CELEX / COM Id</th>
+                    <th scope="col">CELEX (COM if no CELEX)</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Scope</th>
+                    <th scope="col">Publish Date</th>
                     <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for document in documents %}
                     <tr>
-                        <th scope="row">{{ document.id }}</th>
-                        <td>{{ document.document }}</td>
+                        <th scope="row">{{ document.eu_id }}</th>
+                        <td>{{ document.title }}</td>
+                        <td>{{ document.scope }}</td>
+                        <td>{{ document.publish_date }}</td>
                         <td>
                             <a href="{% url 'document_details' id=document.id %}" class="btn btn-primary">
-                                Open document
+                                Open document in exploration view
+                            </a>
+                            <a href="{{ document.url }}" class="btn btn-warning">
+                                Go to original document
                             </a>
                         </td>
                     </tr>

@@ -28,7 +28,19 @@ django.setup()
 
 # django imports
 from django.core.management.base import BaseCommand
-from core.models import DateExtraction
+from core.models import Sentence, Document
+
+
+class doc:
+    def __init__(self, name, typedudocument, titreobject, url, type, date):
+        self.name = name
+        self.typedudocument = typedudocument
+        self.titreobject = titreobject
+        self.url = url
+        self.type = type
+        self.sentences = []
+        self.date = date
+
 
 def init_doc_obj():
     """
@@ -36,15 +48,6 @@ def init_doc_obj():
     ARGS: None
     RETURN: List = List of document objects
     """
-    class doc:
-        def __init__(self, name, typedudocument,titreobject, url, type, date):
-            self.name = name
-            self.typedudocument = typedudocument
-            self.titreobject = titreobject
-            self.url = url
-            self.type = type
-            self.sentences = []
-            self.date = date
 
     doc_1 = doc("Communication: 'Fit for 55' - delivering the EU's 2030 climate target on the way to climate neutrality",
                 "COMMUNICATION FROM THE COMMISSION TO THE EUROPEAN PARLIAMENT, THE COUNCIL, THE EUROPEAN ECONOMIC AND SOCIAL COMMITTEE AND THE COMMITTEE OF THE REGIONS EMPTY",
@@ -181,7 +184,7 @@ def init_doc_obj():
                  "2021-07-14" #"14.7.2021"
     )
     
-    list = [doc_1, doc_2, doc_3]
+    list = [doc_1, doc_2, doc_3, doc_4, doc_5, doc_6, doc_7, doc_8, doc_9, doc_10, doc_11, doc_12, doc_13, doc_14, doc_15, doc_16, doc_17, doc_18, doc_19]
 
     return list
 
@@ -513,7 +516,7 @@ def normalize_date(df): # helga
 
 def clean_df(df):
     '''
-    Delets all NaT and sorts df
+    Deletes all NaT and sorts df
     ARGS: df 
     RETURN: df
     '''
@@ -525,11 +528,11 @@ def clean_df(df):
 def add_data_to_db(df):
     # save data
     for index, row in df.iterrows():
-        model = DateExtraction()
-        model.docname = row['name']
-        model.docsentence = row['sentence']
-        model.datelabel = row['datelabel']
-        model.isodate = row['isodate']
+        model = Sentence()
+        model.doc_reference = Document.objects.get(title__exact=row['name'])
+        model.sentence = row['sentence']
+        model.date_label = row['datelabel']
+        model.date_iso = row['isodate']
         model.save()
     return print('-> add_data_to_db() ... done')
 
@@ -581,7 +584,7 @@ def main():
     list_of_doc = init_doc_obj() 
 
     # first delet all data in dateextraction table
-    model = DateExtraction.objects.all()
+    model = Sentence.objects.all()
     model.delete()
 
     for doc in list_of_doc:
