@@ -78,13 +78,11 @@ body {
 
 .fixed-sidebar-de {
     position: sticky;
-    height: 550px;
-    padding: 30px 0;
+    padding: 30px 15px;
     background: rgb(221 232 204);
     top: 9%;
     bottom: auto;
-    padding: 15px 15px !important;
-    border-radius: .5rem !important;
+    border-radius: .5rem;
 }
 
 #number_entries {
@@ -105,5 +103,6 @@ body {
 
 #timeline {
     order: 2;
+    padding: 0px 15px;
     margin: auto;
 }
