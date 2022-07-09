@@ -46,14 +46,14 @@
                         <select onchange="get_dropdown_value()" id="start_date" class="js-example-basic-single"
                                 name="start_date">
                             {% for year in year_filter %}
-                                <option value="{{ year|slice:':4' }}"> {{ year }} </option>
+                                <option value="{{ year }}"> {{ year }} </option>
                             {% endfor %}
                         </select>
                         <label for="end_date">End Year</label>
                         <select onchange="get_dropdown_value()" id="end_date" class="js-example-basic-single"
                                 name="end_date">
                             {% for year in year_filter %}
-                                <option value="{{ year|slice:':4' }}"> {{ year }} </option>
+                                <option value="{{ year }}"> {{ year }} </option>
                             {% endfor %}
                         </select>
                         <button type="button" class="btn btn-primary" id="submit_filter" onclick="filter_url()">
@@ -71,8 +71,8 @@
                             dafür werden alle Einträge in der Datenbank durchlaufen -->
                             {% for col in data %}
                                 <li>
-                                    <span class="date"> {{ col.isodate }} </span>
-                                    <p class="sentence"> {{ col.docsentence }} </p>
+                                    <span class="date"> {{ col.date_iso }} </span>
+                                    <p class="sentence"> {{ col.sentence }} </p>
                                 </li>
                             {% endfor %}
                         </ul>
