@@ -2,6 +2,8 @@
 import os
 import csv
 import pandas as pd
+import spacy
+from spacy import displacy
 from pandarallel import pandarallel
 # django imports
 from django.core.management.base import BaseCommand, CommandError
@@ -155,6 +157,10 @@ def analyse_documents():
             titreobjet = re.findall('<p\sclass="Titreobjet_cp">.*?([^°]+?.??)</p>', dokstring)
             # also information in the rfrenceinstitutionelle-tag
             rfrenceinstitutionelle = re.findall('<p\sclass="Rfrenceinstitutionnelle">.*?([^°]+?.??)</p>', dokstring)
+            cleaned_comnumbers = []
+            for comnumber in rfrenceinstitutionelle:
+                cleaned_comnumbers.append(comnumber.strip())
+            rfrenceinstitutionelle = cleaned_comnumbers
             # there are not only heading1 but heading2 in the dokument, so we need to find these headings2 and exclude non-essential characters
             for match in fullMatches1:
                 liHeaders2 = []
@@ -172,7 +178,7 @@ def analyse_documents():
 
                 tokens = check_string_contains_token(str(typedudocument))
                 tokens += check_string_contains_token(str(titreobjet))
-                tokens += check_string_contains_token(str(rfrenceinstitutionelle))
+                tokens += check_string_contains_token(str(rfrenceinstitutionelle).strip())
                 if not headers2:
                     headers2 = re.findall(
                         '<span>(\s•\d\.[^°]+?.??)(?<=<span>\d\.)|'
@@ -233,20 +239,11 @@ def get_context_labels():
     # !pip install spacy
     # !python -m spacy download en_core_web_lg
 
-    import spacy
-    import pandas as pd
+    nlp = spacy.load("en_core_web_sm")
 
-    nlp = spacy.load("en_core_web_lg")
-
-    df = pd.read_csv("results.csv", sep=";", encoding="utf-8")
+    df = pd.read_csv("./apps/document_classification/results.csv", sep=";", encoding="utf-8")
     df = df.replace({"comnumber": ["\[", "\]", "'", ",.*"]}, {"comnumber": ""}, regex=True)
     df = df.replace({"body": ["\\\\\\\\*\w{3}", "\\\\"]}, {"body": " "}, regex=True)
-
-    # non breaking space (\\xc2\\xa0), right single quotation mark (\\xe2\\x80\\x99s), etc in df["body"] values have to be removed to prevent nouns from clinging together like in "Energy\\xc2\\xa0Directive" to
-
-    # for span in df2["comnumber"]:
-    #    print("\n"+ span + ":")
-    #    print(EUDESK[span])
 
     EUDESK = {
         "COM(2021) 550 final": ["innovation", "clean technology", "adaption to climate change", "emission trading",
@@ -290,61 +287,62 @@ def get_context_labels():
     }
 
     # COM 560 main page auf niederländisch, mglw falsch verlinkt, COM 556 nicht verfügbar auf englisch, COM 551 nur als PDF verfügbar
-
     # https://betterprogramming.pub/the-beginners-guide-to-similarity-matching-using-spacy-782fc2922f7c
     def process_text(text):
         doc = nlp(text.lower())
-
-    result = []
-    for token in doc:
-        if token.text in nlp.Defaults.stop_words:
-            continue
-    if token.is_punct:
-        continue
-    if token.lemma_ == '-PRON-':
-        continue
-    result.append(token.lemma_)
-    return " ".join(" ".join(result).split())
+        result = []
+        for token in doc:
+            if token.text in nlp.Defaults.stop_words:
+                continue
+            if token.is_punct:
+                continue
+            if token.lemma_ == '-PRON-':
+                continue
+            result.append(token.lemma_)
+        return " ".join(" ".join(result).split())
 
     def calculate_similarity(text1, text2):
         base = nlp(process_text(text1))
-
-    compare = nlp(process_text(text2))
-    return base.similarity(compare)
+        compare = nlp(process_text(text2))
+        return base.similarity(compare)
 
     df["clean_body"] = df.apply(lambda row: process_text(row["body"]), axis=1)
-
-    df["clean_body"][0]
 
     compare = df["clean_body"][0]
     base = EUDESK["COM(2021) 550 final"][1]
     calculate_similarity(base, compare)
-
     weighted_similarity = []
+    cleaned_comnumber = []
     for row in range(len(df)):
-        comnum = df["comnumber"][row]
-    sim_list = []
-    desk_list = []
-    for desk in EUDESK[comnum]:
-        sim = calculate_similarity(desk, df["clean_body"][row])
-    sim_list.append(sim)
-    desk_list.append(desk)
-    tup = sorted(zip(sim_list, desk_list), reverse=True)
-    weighted_similarity.append(tup)
-
+        comnumber = df["comnumber"][row]
+        comnumber = comnumber.replace("\n", "")
+        comnumber = comnumber.strip()
+        cleaned_comnumber.append(comnumber)
+    df["comnumber"] = cleaned_comnumber
+    for row in range(len(df)):
+        comnum = df["comnumber"][row].strip()
+        if comnum not in EUDESK:
+            weighted_similarity.append([])
+            continue
+        sim_list = []
+        desk_list = []
+        for desk in EUDESK[comnum]:
+            sim = calculate_similarity(desk, df["clean_body"][row])
+            sim_list.append(sim)
+            desk_list.append(desk)
+            tup = sorted(zip(sim_list, desk_list), reverse=True)
+        weighted_similarity.append(tup)
     df["weighted_similarities"] = weighted_similarity
-
-    df
-
+    print(df["weighted_similarities"])
     deskriptor = []
     for ws in df["weighted_similarities"]:
         a = []
-    for ws_pair in ws[:5]:
-        a.append(ws_pair[1])
-    deskriptor.append(a)
+        for ws_pair in ws[:5]:
+            a.append(ws_pair[1])
+        deskriptor.append(a)
     df["deskriptor"] = deskriptor
 
-    df.to_csv(r'C:\Users\robin\Desktop\coding\results_desk.csv', sep=";", index=False)
+    df.to_csv(r'./apps/document_classification/results_desk.csv', sep=";", index=False)
 
 
 class Command(BaseCommand):
