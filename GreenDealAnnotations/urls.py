@@ -17,11 +17,16 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import TemplateView
 from apps.core.views import index
+from apps.core.views import DocumentViewer
+from apps.core.views import test_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
-    path('', index),
     path('timeline/', include('apps.date_extraction.urls')),
-    path('core/', include('apps.core.urls')),
+    path('classification/', include('apps.document_classification.urls')),
+    path('test/<str:id>/', test_page, name='test'),
+    path('documentviewer', DocumentViewer),
+    #path('core/', include('apps.core.urls')),
+    path('', index),
 ]

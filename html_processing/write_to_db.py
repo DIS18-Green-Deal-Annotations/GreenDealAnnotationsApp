@@ -8,7 +8,7 @@ from apps.core.models import HtmlCode
 if __name__ == '__main__':
 
 
-    path = "./html_processing/crawler/html/"
+    path = "./crawler/html/"
 
     files = os.listdir(path)
     for file in files:
