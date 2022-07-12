@@ -12,4 +12,6 @@ class DocumentClassification(models.Model):
     titreobjet = models.CharField(max_length=255)
     comnumber = models.CharField(max_length=255)
     structure = models.CharField(max_length=255)
+    cleanbody = models.TextField()
+    weightedsimilarities = models.TextField()
     deskriptor = models.TextField()

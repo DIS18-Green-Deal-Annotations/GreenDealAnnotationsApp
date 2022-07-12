@@ -1,8 +1,6 @@
-
 from django.urls import path
-from .views import TestView
-
+from . import views
 
 urlpatterns = [
-    path('abcd/', TestView),
+    path('', views.document_classification)
 ]

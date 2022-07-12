@@ -3,28 +3,29 @@ import os
 import csv
 import pandas as pd
 import spacy
-from spacy import displacy
-from pandarallel import pandarallel
-# django imports
-from django.core.management.base import BaseCommand, CommandError
-from apps.date_extraction.models import DateExtraction
+import re
 
+from pandarallel import pandarallel
+from django.core.management.base import BaseCommand, CommandError
 from apps.document_classification.models import DocumentClassification
 
 pandarallel.initialize()
-import re
 
 
-def persist_to_db(row):
-    model = DocumentClassification()
-    model.header = row.header
-    model.header2 = row.header2
-    model.body = row.body
-    model.doctype = row.doctype
-    model.titreobjet = row.titreobjet
-    model.comnumber = row.comnumber
-    model.structure = row.structure
-    model.save()
+def persist_to_db(df):
+    for index, row in df.iterrows():
+        model = DocumentClassification()
+        model.header = row['header']
+        model.header2 = row['header2']
+        model.body = row['body']
+        model.doctype = row['doctype']
+        model.titreobjet = row['titreobjet']
+        model.comnumber = row['comnumber']
+        model.structure = row['structure']
+        model.cleanbody = row['clean_body']
+        model.weightedsimilarities = row['weighted_similarities']
+        model.deskriptor = row['deskriptor']
+        model.save()
 
 
 def check_string_contains_token(search_string):
@@ -228,9 +229,6 @@ def analyse_documents():
             heading2.append(re.sub('(<.*?>)|(\\\\n)|(\\\\r)|(\\\\xe2\\\\x80\\\\x..)', '', str(header2)))
             match = re.sub('(<.*?>)|(\\\\n)|(\\\\r)|(\\\\xe2\\\\x80\\\\x..)', '', str(match))
     f.close()
-    df = pd.read_csv('./apps/document_classification/results.csv', sep=';')
-    for row in df.itertuples(index=True, name='Pandas'):
-        persist_to_db(row)
 
 
 def get_context_labels():
@@ -342,7 +340,7 @@ def get_context_labels():
         deskriptor.append(a)
     df["deskriptor"] = deskriptor
 
-    df.to_csv(r'./apps/document_classification/results_desk.csv', sep=";", index=False)
+    persist_to_db(df)
 
 
 class Command(BaseCommand):
