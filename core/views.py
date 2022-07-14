@@ -109,3 +109,17 @@ def timeline(request):
     }
 
     return render(request, './apps/date_extraction/timeline.html', context)
+
+def tables(request):
+    categories = []
+    categories_path = r"./html_processing/table_extraction_dbs/categories.txt"
+    with open(categories_path, "r") as categories_file:
+        lines = categories_file.read().splitlines()
+        for category in lines:
+            categories.append(category)
+
+    context = {
+        "Hello": "World",
+        "categories": sorted(categories)
+    }
+    return render(request, './apps/table_extraction/tables.html', context)

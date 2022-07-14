@@ -66,12 +66,6 @@ ul#dates li:before {
     font-size: 130%;
 }
 
-body {
-    background: linear-gradient(45deg, #4e8a53d5, #c2d651c7);
-    font-family: sans-serif !important;
-    overflow-x: hidden;
-}
-
 .flex-column > * {
     margin-top: 10px;
 }

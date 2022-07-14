@@ -38,3 +38,28 @@ class Sentence(models.Model):  # EHEMALS DateExtraction
 
     class Meta:
         app_label = "core"
+
+# ----- GRUPPE TABLE EXTRACTION -----
+
+class TABLE_CATEGORIES(models.Model):
+    Cat = models.TextField()
+    CatID = models.SmallIntegerField()
+
+    class Meta:
+        app_label = "core"
+
+class TABLES(models.Model):
+    ComNr = models.TextField()
+    DocID = models.SmallIntegerField()
+    TableNr = models.SmallIntegerField()
+    Filename = models.FilePathField()
+    TableContentHTML = models.TextField()
+    CatID = models.ForeignKey(
+        TABLE_CATEGORIES,
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True
+    )
+
+    class Meta:
+        app_label = "core"
