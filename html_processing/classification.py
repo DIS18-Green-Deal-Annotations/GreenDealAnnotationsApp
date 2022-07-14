@@ -5,22 +5,41 @@ import pandas as pd
 import spacy
 import re
 
+import sys
+from pathlib import Path
+
+import django
+from django.conf import settings
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+sys.path.append('./')
+settings.configure(
+    DJANGO_SETTINGS_MODULE='GreenDealAnnotations.settings',
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'GreenDealAnnotations/db.sqlite3',
+        }
+    },
+)
+django.setup()
+
 from pandarallel import pandarallel
 from django.core.management.base import BaseCommand, CommandError
-from apps.document_classification.models import DocumentClassification
+from core.models import Paragraphs, Document
 
 pandarallel.initialize()
 
-
 def persist_to_db(df):
     for index, row in df.iterrows():
-        model = DocumentClassification()
+        model = Paragraphs()
         model.header = row['header']
         model.header2 = row['header2']
-        model.body = row['body']
-        model.doctype = row['doctype']
-        model.titreobjet = row['titreobjet']
-        model.comnumber = row['comnumber']
+        # model.body = row['body']
+        # model.doctype = row['doctype']
+        # model.titreobjet = row['titreobjet']
+        model.comnumber = Document.objects.get(com_id__exact=row['comnumber'])
         model.structure = row['structure']
         model.cleanbody = row['clean_body']
         model.weightedsimilarities = row['weighted_similarities']
@@ -120,13 +139,13 @@ def check_string_contains_token(search_string):
 
 
 def analyse_documents():
-    f = open('./apps/document_classification/results.csv', 'w')
+    f = open('classificationresults.csv', 'w')
     writer = csv.writer(f, delimiter=";")
     # names of rows
     writer.writerow(['header', 'header2', 'body', 'doctype', 'titreobjet', 'comnumber', 'structure'])
 
     # dokument count/ necessity to name it like dokument1, dokument2, document3 etc. when crawling
-    dir_path = r'./html_processing/crawler/html'
+    dir_path = r'./crawler/html'
     for filename in os.listdir(dir_path):
         dok = open(os.path.join(dir_path, filename))
         dokstring = str(dok.read())
@@ -239,7 +258,7 @@ def get_context_labels():
 
     nlp = spacy.load("en_core_web_sm")
 
-    df = pd.read_csv("./apps/document_classification/results.csv", sep=";", encoding="utf-8")
+    df = pd.read_csv("classificationresults.csv", sep=";", encoding="utf-8")
     df = df.replace({"comnumber": ["\[", "\]", "'", ",.*"]}, {"comnumber": ""}, regex=True)
     df = df.replace({"body": ["\\\\\\\\*\w{3}", "\\\\"]}, {"body": " "}, regex=True)
 
@@ -347,3 +366,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         analyse_documents()
         get_context_labels()
+
+
+if __name__ == '__main__':
+    analyse_documents()
+    get_context_labels()
