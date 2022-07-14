@@ -28,10 +28,10 @@
                         <div id="number_entries"></div>
                         <!--  hier werden die Container für die einzelnen Filterparts aufgesetzt
                         und die select-Optionen mit den möglichen Optionen aus der Datenbank befüllt -->
-                        <label for="doc_name">Document Name</label>
-                        <select class="js-example-basic-multiple" id="doc_name" onchange="get_dropdown_value()" name="doc_name" multiple="multiple">
-                            {% for doc in doc_names_filter %}
-                            <option value="{{ doc }}">{{ doc }}</option>
+                        <label for="com_name">Com number</label>
+                        <select class="js-example-basic-multiple" id="com_name" onchange="get_dropdown_value()" name="com_name" multiple="multiple">
+                            {% for com in com_name %}
+                            <option value="{{ com }}">{{ com }}</option>
                             {% endfor %}
                         </select>
                         <label for="categories">Categories</label>
@@ -54,8 +54,7 @@
                         {% for col in data %}
                         <li>
                             <span class="category"> {{ col.category }} </span>
-                            <p>{{ Hello }}</p>
-                            <a href="{% url "document_details" id=col.doc_reference.id %}" class="btn btn-secondary">Go to document</a>
+                            <p>{{ data }}</p>
                         </li>
                         {% endfor %}
                     </ul>

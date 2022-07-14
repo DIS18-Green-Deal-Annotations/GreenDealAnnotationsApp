@@ -43,8 +43,8 @@ class Sentence(models.Model):  # EHEMALS DateExtraction
 # ----- GRUPPE TABLE EXTRACTION -----
 
 class TABLE_CATEGORIES(models.Model):
-    Cat = models.TextField()
     CatID = models.SmallIntegerField()
+    Cat = models.TextField()
 
     class Meta:
         app_label = "core"
@@ -53,14 +53,11 @@ class TABLES(models.Model):
     ComNr = models.TextField()
     DocID = models.SmallIntegerField()
     TableNr = models.SmallIntegerField()
-    Filename = models.FilePathField()
+    Filename = models.TextField()
     TableContentHTML = models.TextField()
-    CatID = models.ForeignKey(
-        TABLE_CATEGORIES,
-        on_delete=models.PROTECT,
-        blank=True,
-        null=True
-    )
+    CatID = models.ManyToManyField(TABLE_CATEGORIES)
+    def get_catids(self):
+        return ",".join([str(p) for p in self.CatID.all()])
 
     class Meta:
         app_label = "core"

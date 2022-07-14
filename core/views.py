@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 # custom imports
-from .models import Document, Sentence, Paragraphs
+from .models import Document, Sentence, Paragraphs, TABLE_CATEGORIES, TABLES
 
 
 @csrf_exempt
@@ -111,15 +111,13 @@ def timeline(request):
     return render(request, './apps/date_extraction/timeline.html', context)
 
 def tables(request):
-    categories = []
-    categories_path = r"./html_processing/table_extraction_dbs/categories.txt"
-    with open(categories_path, "r") as categories_file:
-        lines = categories_file.read().splitlines()
-        for category in lines:
-            categories.append(category)
+    categories = TABLE_CATEGORIES.objects.all().values_list('Cat', flat=True)
+    com_name = TABLES.objects.all().values_list('ComNr', flat=True)
+    data = TABLES.objects.all().values_list('TableContentHTML', flat=True)
 
     context = {
-        "Hello": "World",
+        "data": data,
+        "com_name": com_name,
         "categories": sorted(categories)
     }
     return render(request, './apps/table_extraction/tables.html', context)
