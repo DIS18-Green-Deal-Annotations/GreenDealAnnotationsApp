@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 # custom imports
-from .models import Document, Sentence
+from .models import Document, Sentence, Paragraphs
 
 
 @csrf_exempt
