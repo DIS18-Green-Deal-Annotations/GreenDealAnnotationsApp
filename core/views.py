@@ -173,4 +173,4 @@ def classification(request):
         "length_descriptors": len(data2),
     }
 
-    return render(request, './apps/date_classification/classification.html', context)
+    return render(request, './apps/doc_classification/classification.html', context)
