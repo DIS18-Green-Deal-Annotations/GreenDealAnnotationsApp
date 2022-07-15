@@ -1,0 +1,14 @@
+.document-classification-td {
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+.document-classification-td:hover {
+    max-width: 200px;
+    background-color: yellowgreen;
+    overflow: visible;
+    white-space: normal;
+    height: auto;
+}
