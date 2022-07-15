@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic import TemplateView
 from core.views import index
-from core.views import DocumentViewer, timeline, browse_documents, tables
+from core.views import DocumentViewer, timeline, browse_documents, tables, classification
 
 urlpatterns = [
     # pages by groups
