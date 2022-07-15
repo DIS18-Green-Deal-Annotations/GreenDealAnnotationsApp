@@ -1,5 +1,6 @@
 {% extends '../../utils/base.html' %} {% load static %} {% block title %} Green Deal Annotation - Tables {% endblock %} {% block head_inject %}
 <link rel="stylesheet" href="{% static 'css/timeline.css' %}" />
+<link rel="stylesheet" href="{% static 'css/tables.css' %}" />
 <script
     src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
     integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
@@ -15,26 +16,26 @@
                 <h2>Tables</h2>
                 <p>
                     This page allows you to filter the tables from all European Green Deal documents by selecting different categories. In the left
-                    box, the number of results is displayed at the top. Below that, you can choose one or more different categories which will refine
+                    box, the number of results is displayed at the top. Below that, you can choose one or more different categories and documents which will refine
                     the search results after clicking on the submit button.
                 </p>
             </div>
         </div>
         <div class="row">
-            <!-----------------------------------FILTER-PANEL------------------------------------------->
+            <!----------------------------------FILTER-PANEL-------------------------------------------->
             <div class="col-4">
                 <div id="Filter" class="col-md-4-de fixed-sidebar-de">
                     <div class="d-flex flex-column">
                         <div id="number_entries"></div>
                         <!--  hier werden die Container für die einzelnen Filterparts aufgesetzt
                         und die select-Optionen mit den möglichen Optionen aus der Datenbank befüllt -->
-                        <label for="com_name">Com number</label>
-                        <select class="js-example-basic-multiple" id="com_name" onchange="get_dropdown_value()" name="com_name" multiple="multiple">
-                            {% for com in com_name %}
+                        <label for="ComNr">COM number</label>
+                        <select class="js-example-basic-multiple" id="ComNr" onchange="get_dropdown_value()" name="ComNr" multiple="multiple">
+                            {% for com in ComNr %}
                             <option value="{{ com }}">{{ com }}</option>
                             {% endfor %}
                         </select>
-                        <label for="categories">Categories</label>
+                        <label for="categories">Category</label>
                         <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
                             {% for cat in categories %}
                             <option value="{{ cat }}">{{ cat }}</option>
@@ -45,16 +46,16 @@
                     </div>
                 </div>
             </div>
-            <!-----------------------------------TIMELINE------------------------------------------->
+            <!----------------------------------TIMELINE-------------------------------------------->
             <div class="col-8">
                 <div id="timeline">
                     <ul id="dates">
                         <!-- unsere komplette Timeline wird durch dieses Jinja Template erstellt;
                             dafür werden alle Einträge in der Datenbank durchlaufen -->
                         {% for col in data %}
-                        <li>
-                            <span class="category"> {{ col.category }} </span>
-                            <p>{{ data }}</p>
+                        <li id="table">
+                            <span class="date"> {{ col.CatID }} </span>
+                            {{ col.TableContentHTML | safe }}
                         </li>
                         {% endfor %}
                     </ul>

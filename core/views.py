@@ -111,13 +111,14 @@ def timeline(request):
     return render(request, './apps/date_extraction/timeline.html', context)
 
 def tables(request):
-    categories = TABLE_CATEGORIES.objects.all().values_list('Cat', flat=True)
-    com_name = TABLES.objects.all().values_list('ComNr', flat=True)
-    data = TABLES.objects.all().values_list('TableContentHTML', flat=True)
-
+    Cat = TABLE_CATEGORIES.objects.all().values_list('Cat', flat=True).order_by("CatID")
+    ComNr = TABLES.objects.all().values_list('ComNr', flat=True).order_by("ComNr")
+    TableContentHTML = TABLES.objects.all().order_by("DocID")
+    allvals = TABLE_CATEGORIES.objects.all()
     context = {
-        "data": data,
-        "com_name": com_name,
-        "categories": sorted(categories)
+        "all" : allvals,
+        "data": TableContentHTML,
+        "ComNr": ComNr,
+        "categories": Cat,
     }
     return render(request, './apps/table_extraction/tables.html', context)
