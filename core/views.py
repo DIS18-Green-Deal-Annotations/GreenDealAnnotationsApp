@@ -122,3 +122,55 @@ def tables(request):
         "categories": Cat,
     }
     return render(request, './apps/table_extraction/tables.html', context)
+
+# ----- GRUPPE DATE CLASSIFICATION -----
+
+
+@csrf_exempt
+def classification(request):
+
+    # zieht sich die übergebenen Filter Values aus der Query
+    filter_values2 = {}
+    filter_values2["descriptor"] = request.GET.get("descriptor")
+
+
+    # sollten Filter Kategorien nicht ausgewählt worden sein, wird auf Defaults zurückgegriffen
+    if (filter_values2["descriptor"] != None and filter_values2["descriptor"] != ""):
+        texttest = filter_values2["descriptor"]
+    else:
+        texttest = "pls select"
+
+    # filtert die Daten aus der Datenbank basierend auf den ausgewählten Filter Values
+    data2 = Paragraphs.objects.filter(
+        deskriptor__regex="'"+str(filter_values2["descriptor"])+"'"
+    )
+
+    data2_all = Paragraphs.objects.all()
+
+    # extrahiert alle Dokumentennamen und Jahreszahlen aus der Datenbank, um sie als Optionen in die Datenbank zu schreiben
+    get_distinct_desc_names = Paragraphs.objects.all().values_list('deskriptor', flat=True).distinct()
+
+    templist = []
+    text = []
+    text2 = []
+
+    i = 0
+    for a in get_distinct_desc_names:
+        text = a[1:-1].split(",")
+        for c in text:
+            c = c.lstrip(" ")
+            templist.append(c[1:-1])
+        i = i + 1
+
+    distinct_desc_names = list(set(templist))
+    distinct_desc_names = sorted(distinct_desc_names)
+    context = {
+        "data2": data2,
+        "data2_all": data2_all,
+        "descriptor_filter": distinct_desc_names,
+        "descriptor": filter_values2["descriptor"],
+        "desk2": texttest,
+        "length_descriptors": len(data2),
+    }
+
+    return render(request, './apps/date_classification/classification.html', context)
