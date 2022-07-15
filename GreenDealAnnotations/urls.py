@@ -7,6 +7,7 @@ from core.views import DocumentViewer, timeline, browse_documents, tables
 urlpatterns = [
     # pages by groups
     path('timeline/', timeline, name='timeline'),
+    path('classification/', classification, name='classification'),
     path('documentviewer/<int:id>/', DocumentViewer, name='document_details'),
     path('documentviewer/', browse_documents, name='all_documents'),
     path('tableviewer/', tables, name='tables'),
