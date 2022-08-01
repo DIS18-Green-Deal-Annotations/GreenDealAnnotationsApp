@@ -29,16 +29,11 @@
                         <div id="number_entries"></div>
                         <!--  hier werden die Container für die einzelnen Filterparts aufgesetzt
                         und die select-Optionen mit den möglichen Optionen aus der Datenbank befüllt -->
-                        <label for="ComNr">COM number</label>
-                        <select class="js-example-basic-multiple" id="ComNr" onchange="get_dropdown_value()" name="ComNr" multiple="multiple">
-                            {% for com in ComNr %}
-                            <option value="{{ com }}">{{ com }}</option>
-                            {% endfor %}
-                        </select>
-                        <label for="categories">Category</label>
-                        <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
-                            {% for cat in categories %}
-                            <option value="{{ cat }}">{{ cat }}</option>
+                        <label for="Category_filter">Category</label>
+                        <select class="js-example-basic-multiple" id="Category_filter" onchange="get_dropdown_value()"
+                                name="Category_filter" multiple="multiple">
+                            {% for cat in avail_categories %}
+                                <option value="{{ cat }}">{{ cat }}</option>
                             {% endfor %}
                         </select>
                         <button type="button" class="btn btn-primary" id="submit_filter" onclick="filter_url()">Submit</button>
@@ -50,12 +45,12 @@
             <div class="col-8">
                 <div id="timeline">
                     <ul id="dates">
-                        <!-- unsere komplette Timeline wird durch dieses Jinja Template erstellt;
-                            dafür werden alle Einträge in der Datenbank durchlaufen -->
-                        {% for col in data %}
+                        {% for table in Tables_html %}
                         <li id="table">
-                            <span class="date"> {{ col.CatID }} </span>
-                            {{ col.TableContentHTML | safe }}
+                            <span class="date">
+                                {{  table.Category  }}
+                            </span>
+                            {{ table.TableContentHTML | safe }}
                         </li>
                         {% endfor %}
                     </ul>
@@ -71,25 +66,16 @@
             $('.js-example-basic-multiple').select2();
         });
 
-    window.onload = function() {
-        $('#start_date').val(String({{ start_year }}));
-        $('#end_date').val(String({{ end_year }}));
-        /*$('#doc_name').val(['1', '2']); TODO*/
-    };
-
     /********************************FILTERUNG*UND*WEITERLEITUNG***************************************/
 
         // Anzahl der Einträge
-        document.getElementById("number_entries").textContent=("{{ data|length }}");
+        document.getElementById("number_entries").textContent=("{{ Tables_html|length }}");
 
         // Zieht sich die ausgewählten Werte im Dropdown und schreibt sie in ein dictionary
         var filter_values = {};
 
         function get_dropdown_value() {
-
-            filter_values["doc_name"] = $(".js-example-basic-multiple").select2("val");
-            filter_values["start_date"] = document.getElementById('start_date').value;
-            filter_values["end_date"] = document.getElementById('end_date').value;
+            filter_values["Category_filter"] = $(".js-example-basic-multiple").select2("val");
         }
 
         // Encoded die ausgewählten Filterwerte (dict) in einen str, baut eine URL
@@ -101,14 +87,14 @@
                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(filter_values[p]));
             }
 
-            str = "?" + str.join("&") + "#timeline";
+            str = "?" + str.join("&") + "#timeline"; // & will be converted to %2C in url
             window.location = str;
         }
 
         // Reset Button, löscht die ausgewählten Filter und die Werte aus dem Dictionary,
         // leitet anschließend auf die Seite (View) mit den ungefilterten Daten
         function reset(){
-            window.location = "?doc_name=&start_date=&end_date=#timeline"
+            window.location = "?Category_filter=#timeline"
         }
 </script>
 {% endblock %}

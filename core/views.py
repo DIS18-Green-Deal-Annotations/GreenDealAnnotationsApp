@@ -9,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 # custom imports
 from .models import Document, Sentence, Paragraphs, TABLE_CATEGORIES, TABLES
-
+from django.db.models import Count
 
 @csrf_exempt
 def index(request):
@@ -111,15 +111,21 @@ def timeline(request):
     return render(request, './apps/date_extraction/timeline.html', context)
 
 def tables(request):
-    Cat = TABLE_CATEGORIES.objects.all().values_list('Cat', flat=True).order_by("CatID")
-    ComNr = TABLES.objects.all().values_list('ComNr', flat=True).order_by("ComNr")
-    TableContentHTML = TABLES.objects.all().order_by("DocID")
-    allvals = TABLE_CATEGORIES.objects.all()
+    if request.GET.get("Category_filter"):
+        query_content = {}
+        filter_values = {}
+        filter_values["Category_filter"] = request.GET.get("Category_filter")
+        tag_list = filter_values["Category_filter"].split(",")
+        query_content = TABLES.objects.filter(Cat__Cat__in=tag_list).distinct()
+        # query_content = TABLES.objects.filter(Cat__Cat__in=tag_list).annotate(num_tags=Count('Cat')).filter(num_tags__gte=len(tag_list)).distinct()
+        Tables_html = query_content
+    else:
+        Tables_html = TABLES.objects.all()
+    avail_categories = TABLE_CATEGORIES.objects.all().values_list('Cat', flat=True).distinct()
+    
     context = {
-        "all" : allvals,
-        "data": TableContentHTML,
-        "ComNr": ComNr,
-        "categories": Cat,
+        "Tables_html": Tables_html, 
+        "avail_categories": avail_categories,
     }
     return render(request, './apps/table_extraction/tables.html', context)
 
