@@ -54,9 +54,9 @@ class TABLES(models.Model):
     TableNr = models.SmallIntegerField()
     Filename = models.TextField()
     TableContentHTML = models.TextField()
-    CatID = models.ManyToManyField(TABLE_CATEGORIES)
-    def get_catids(self):
-        return ",".join([str(p) for p in self.CatID.all()])
+    Cat = models.ManyToManyField(TABLE_CATEGORIES)
+    def Category(self):
+        return ", ".join([str(p) for p in self.Cat.values_list('Cat', flat=True)])
 
     class Meta:
         app_label = "core"

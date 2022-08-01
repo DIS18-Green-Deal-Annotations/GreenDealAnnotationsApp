@@ -17,7 +17,7 @@ admin.site.register(Document, DocumentAdmin)
 
 # TABLE EXTRACTION
 class TABLESAdmin(admin.ModelAdmin):
-    list_display = ('id', 'ComNr', 'DocID', 'TableNr', 'Filename', 'TableContentHTML', 'get_catids')
+    list_display = ('id', 'ComNr', 'DocID', 'TableNr', 'Filename', 'TableContentHTML', 'Category')
 class TABLE_CATEGORIESAdmin(admin.ModelAdmin):
     list_display = ('id', 'Cat')
 
