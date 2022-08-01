@@ -47,12 +47,9 @@ def main():
         )
     with open(categories_path, "r") as categories_file:
         lines = categories_file.read().splitlines()
-        CatID = 0
         for category in sorted(lines):
-            CatID += 1
             TABLE_CATEGORIES.objects.create(
                     Cat = category,
-                    CatID = CatID
                 )
 
 

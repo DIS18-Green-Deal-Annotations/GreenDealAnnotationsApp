@@ -19,7 +19,7 @@ admin.site.register(Document, DocumentAdmin)
 class TABLESAdmin(admin.ModelAdmin):
     list_display = ('id', 'ComNr', 'DocID', 'TableNr', 'Filename', 'TableContentHTML', 'get_catids')
 class TABLE_CATEGORIESAdmin(admin.ModelAdmin):
-    list_display = ('id', 'Cat', 'CatID')
+    list_display = ('id', 'Cat')
 
 admin.site.register(TABLES, TABLESAdmin)
 admin.site.register(TABLE_CATEGORIES, TABLE_CATEGORIESAdmin)

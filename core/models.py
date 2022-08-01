@@ -43,7 +43,6 @@ class Sentence(models.Model):  # EHEMALS DateExtraction
 # ----- GRUPPE TABLE EXTRACTION -----
 
 class TABLE_CATEGORIES(models.Model):
-    CatID = models.SmallIntegerField()
     Cat = models.TextField()
 
     class Meta:
