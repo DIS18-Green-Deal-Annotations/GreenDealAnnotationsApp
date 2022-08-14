@@ -118,8 +118,19 @@ def check_string_contains_token(search_string):
                 tokens.append('ex-post-evaluation')
     return tokens
 
+def remove_tags(tuples):
+    for item in tuples:
+        cleaned_string = ''
+        for entry in item:
+            cleaned_string = cleaned_string + entry
+        item = cleaned_string
+        item = item.strip()
+        item = re.sub('(\\\\n)|(\\\\r)|(\\\\xe2\\\\x80\\\\xa2)|\\n|<\/p|\'\',|\'\'|(<.*?>)', '',
+                              item)
+        return item
 
 def analyse_documents():
+
     f = open('./apps/document_classification/results.csv', 'w')
     writer = csv.writer(f, delimiter=";")
     # names of rows
@@ -205,19 +216,35 @@ def analyse_documents():
                                 '(<p\sclass="li\sManualHeading3">)([^°]+?.??<dl\sid="footnotes">)|'
                                 '(<p\sclass="li\sHeading3">)([^°]+?.??<dl\sid="footnotes">)|'
                                 '(<span\sclass="num">[^°]+?.??</p)', match)
-
+                        cleaned_header2 = []
+                        if type(header2) is list:
+                            cleaned_header2 = remove_tags(header2)
+                        else:
+                            header2 = header2.strip()
+                            header2 = re.sub('(\\\\n)|(\\\\r)|(\\\\xe2\\\\x80\\\\xa2)|\\n|\n|(</p\')|('',)|(<.*?>)|([\[\]])', '',
+                                                      header2)
+                            cleaned_header2.append(header2)
                         header2 = re.sub('(\\\\n)|(\\\\r)|(\\\\xe2\\\\x80\\\\xa2)', '', str(header2))
                         tokens += check_string_contains_token(h1)
                         tokens += check_string_contains_token(header2)
                         # tokens = filter(None, tokens)
+                        h1 = h1.strip()
+                        h1 = re.sub(
+                            '(\\\\n)|(\\\\r)|(\\\\xe2\\\\x80\\\\xa2)|\\n|\n|(</p\')|('',)|(<.*?>)|([\[\]])', '',
+                            h1)
+                        cleaned_headers2 = remove_tags(headers2)
                         writer.writerow(
-                            [h1, header2, headers2, typedudocument, titreobjet, rfrenceinstitutionelle, tokens])
+                            [h1, cleaned_header2, cleaned_headers2, typedudocument, titreobjet, rfrenceinstitutionelle, tokens])
                 else:
-                    match = re.sub('(<.*?>)|(\\\\n)|(\\\\r)|(\\\\xe2\\\\x80\\\\x..)', '', str(match))
+                    cleaned_matches = remove_tags(matches1)
+                    match = match.strip()
+                    match = re.sub('(\\\\n)|(\\\\r)|(\\\\xe2\\\\x80\\\\xa2)|\\n|\n|(</p\')|('',)|(<.*?>)|([\[\]])',
+                                     '',
+                                     match)
                     tokens += check_string_contains_token(str(matches1))
                     filter(None, tokens)
                     writer.writerow(
-                        [matches1, '', match, typedudocument, titreobjet, rfrenceinstitutionelle, tokens])
+                        [cleaned_matches, [], match, typedudocument, titreobjet, rfrenceinstitutionelle, tokens])
 
         # if html-tags wanted to be delated in header, header2 and in body:
         heading1 = []

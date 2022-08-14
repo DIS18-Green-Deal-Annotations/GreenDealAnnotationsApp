@@ -39,9 +39,9 @@
         </tr>
         {% for col in model %}
             <tr>
-                <td class="document-classification-td">{{ col.header }}</td>
-                <td class="document-classification-td">{{ col.header2 }}</td>
-                <td class="document-classification-td">{{ col.body }}</td>
+                <td class="document-classification-td">{{ col.header|striptags }}</td>
+                <td class="document-classification-td">{{ col.header2|striptags }}</td>
+                <td class="document-classification-td">{{ col.body|striptags }}</td>
                 <td class="document-classification-td">{{ col.doctype }}</td>
                 <td class="document-classification-td">{{ col.titreobjet }}</td>
                 <td class="document-classification-td">{{ col.comnumber }}</td>
